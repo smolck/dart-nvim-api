@@ -19,8 +19,10 @@ class {{ etype.name }} {
     {{ etype.name }}(this._codeData);
 
     {% for f in functions if f.ext and f.name.startswith(etype.prefix) %}
-    /// since: {{f.since}}
-    Future<{{ f.return_type.native_type_ret }}> {{ f.name | capitalize | replace(etype.prefix, '') }}(Neovim neovim, {{ f.argstring }}) { 
+      {% set trimmedFname = f.name | replace('nvim_', '') %}
+    /// since: {{ f.since }}
+    Future<{{ f.return_type.native_type_ret }}> {{ to_camel_case(trimmedFname) }}(Neovim neovim, {{ f.argstring }}) { 
+    {% set trimmedFname = f.name | replace('nvim_', '') %}
         return neovim.session.call("{{f.name}}",
                           args: [_codeData
                           {% if f.parameters|count > 0 %}
@@ -47,6 +49,7 @@ class Neovim {
 
   {% for f in functions if not f.ext %}
     {% set trimmedFname = f.name | replace('nvim_', '') %}
+    /// since: {{ f.since }}
     Future<{{ f.return_type.native_type_ret }}> {{ to_camel_case(trimmedFname) }}({{ f.argstring }}) async {
         var retVal = await _session.call("{{ f.name }}",
           args: [{{ make_args_from_params(f.parameters) | map(attribute = "name") | join(", ") }}]);

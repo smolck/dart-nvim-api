@@ -1,4 +1,4 @@
-// Generated 2019-10-19 13:14:25.971132 by `gen_bindings.py`.
+// Generated 2019-10-19 17:57:00.948703 by `gen_bindings.py`.
 // DO NOT MODIFY DIRECTLY!
 
 import 'dart:async';
@@ -19,166 +19,165 @@ class Buffer {
   Buffer(this._codeData);
 
   /// since: 1
-  Future<int> Nvim_buf_line_count(
+  Future<int> bufLineCount(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_buf_line_count", args: [_codeData]);
   }
 
   /// since: 4
-  Future<bool> Nvim_buf_attach(
+  Future<bool> bufAttach(
       Neovim neovim, bool send_buffer, Map<dynamic, dynamic> opts) {
     return neovim.session
         .call("nvim_buf_attach", args: [_codeData, send_buffer, opts]);
   }
 
   /// since: 4
-  Future<bool> Nvim_buf_detach(
+  Future<bool> bufDetach(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_buf_detach", args: [_codeData]);
   }
 
   /// since: 1
-  Future<List<String>> Nvim_buf_get_lines(
+  Future<List<String>> bufGetLines(
       Neovim neovim, int start, int end, bool strict_indexing) {
     return neovim.session.call("nvim_buf_get_lines",
         args: [_codeData, start, end, strict_indexing]);
   }
 
   /// since: 1
-  Future<void> Nvim_buf_set_lines(Neovim neovim, int start, int end,
+  Future<void> bufSetLines(Neovim neovim, int start, int end,
       bool strict_indexing, List<String> replacement) {
     return neovim.session.call("nvim_buf_set_lines",
         args: [_codeData, start, end, strict_indexing, replacement]);
   }
 
   /// since: 5
-  Future<int> Nvim_buf_get_offset(Neovim neovim, int index) {
+  Future<int> bufGetOffset(Neovim neovim, int index) {
     return neovim.session.call("nvim_buf_get_offset", args: [_codeData, index]);
   }
 
   /// since: 1
-  Future<dynamic> Nvim_buf_get_var(Neovim neovim, String name) {
+  Future<dynamic> bufGetVar(Neovim neovim, String name) {
     return neovim.session.call("nvim_buf_get_var", args: [_codeData, name]);
   }
 
   /// since: 2
-  Future<int> Nvim_buf_get_changedtick(
+  Future<int> bufGetChangedtick(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_buf_get_changedtick", args: [_codeData]);
   }
 
   /// since: 3
-  Future<List<Map<dynamic, dynamic>>> Nvim_buf_get_keymap(
-      Neovim neovim, String mode) {
+  Future<List<Map<dynamic, dynamic>>> bufGetKeymap(Neovim neovim, String mode) {
     return neovim.session.call("nvim_buf_get_keymap", args: [_codeData, mode]);
   }
 
   /// since: 6
-  Future<void> Nvim_buf_set_keymap(Neovim neovim, String mode, String lhs,
-      String rhs, Map<dynamic, dynamic> opts) {
+  Future<void> bufSetKeymap(Neovim neovim, String mode, String lhs, String rhs,
+      Map<dynamic, dynamic> opts) {
     return neovim.session
         .call("nvim_buf_set_keymap", args: [_codeData, mode, lhs, rhs, opts]);
   }
 
   /// since: 6
-  Future<void> Nvim_buf_del_keymap(Neovim neovim, String mode, String lhs) {
+  Future<void> bufDelKeymap(Neovim neovim, String mode, String lhs) {
     return neovim.session
         .call("nvim_buf_del_keymap", args: [_codeData, mode, lhs]);
   }
 
   /// since: 4
-  Future<Map<dynamic, dynamic>> Nvim_buf_get_commands(
+  Future<Map<dynamic, dynamic>> bufGetCommands(
       Neovim neovim, Map<dynamic, dynamic> opts) {
     return neovim.session
         .call("nvim_buf_get_commands", args: [_codeData, opts]);
   }
 
   /// since: 1
-  Future<void> Nvim_buf_set_var(Neovim neovim, String name, dynamic value) {
+  Future<void> bufSetVar(Neovim neovim, String name, dynamic value) {
     return neovim.session
         .call("nvim_buf_set_var", args: [_codeData, name, value]);
   }
 
   /// since: 1
-  Future<void> Nvim_buf_del_var(Neovim neovim, String name) {
+  Future<void> bufDelVar(Neovim neovim, String name) {
     return neovim.session.call("nvim_buf_del_var", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<dynamic> Nvim_buf_get_option(Neovim neovim, String name) {
+  Future<dynamic> bufGetOption(Neovim neovim, String name) {
     return neovim.session.call("nvim_buf_get_option", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<void> Nvim_buf_set_option(Neovim neovim, String name, dynamic value) {
+  Future<void> bufSetOption(Neovim neovim, String name, dynamic value) {
     return neovim.session
         .call("nvim_buf_set_option", args: [_codeData, name, value]);
   }
 
   /// since: 1
-  Future<int> Nvim_buf_get_number(
+  Future<int> bufGetNumber(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_buf_get_number", args: [_codeData]);
   }
 
   /// since: 1
-  Future<String> Nvim_buf_get_name(
+  Future<String> bufGetName(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_buf_get_name", args: [_codeData]);
   }
 
   /// since: 1
-  Future<void> Nvim_buf_set_name(Neovim neovim, String name) {
+  Future<void> bufSetName(Neovim neovim, String name) {
     return neovim.session.call("nvim_buf_set_name", args: [_codeData, name]);
   }
 
   /// since: 5
-  Future<bool> Nvim_buf_is_loaded(
+  Future<bool> bufIsLoaded(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_buf_is_loaded", args: [_codeData]);
   }
 
   /// since: 1
-  Future<bool> Nvim_buf_is_valid(
+  Future<bool> bufIsValid(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_buf_is_valid", args: [_codeData]);
   }
 
   /// since: 1
-  Future<List<int>> Nvim_buf_get_mark(Neovim neovim, String name) {
+  Future<List<int>> bufGetMark(Neovim neovim, String name) {
     return neovim.session.call("nvim_buf_get_mark", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<int> Nvim_buf_add_highlight(Neovim neovim, int ns_id, String hl_group,
+  Future<int> bufAddHighlight(Neovim neovim, int ns_id, String hl_group,
       int line, int col_start, int col_end) {
     return neovim.session.call("nvim_buf_add_highlight",
         args: [_codeData, ns_id, hl_group, line, col_start, col_end]);
   }
 
   /// since: 5
-  Future<void> Nvim_buf_clear_namespace(
+  Future<void> bufClearNamespace(
       Neovim neovim, int ns_id, int line_start, int line_end) {
     return neovim.session.call("nvim_buf_clear_namespace",
         args: [_codeData, ns_id, line_start, line_end]);
   }
 
   /// since: 1
-  Future<void> Nvim_buf_clear_highlight(
+  Future<void> bufClearHighlight(
       Neovim neovim, int ns_id, int line_start, int line_end) {
     return neovim.session.call("nvim_buf_clear_highlight",
         args: [_codeData, ns_id, line_start, line_end]);
   }
 
   /// since: 5
-  Future<int> Nvim_buf_set_virtual_text(Neovim neovim, int ns_id, int line,
+  Future<int> bufSetVirtualText(Neovim neovim, int ns_id, int line,
       List<dynamic> chunks, Map<dynamic, dynamic> opts) {
     return neovim.session.call("nvim_buf_set_virtual_text",
         args: [_codeData, ns_id, line, chunks, opts]);
@@ -193,125 +192,124 @@ class Window {
   Window(this._codeData);
 
   /// since: 1
-  Future<Buffer> Nvim_win_get_buf(
+  Future<Buffer> winGetBuf(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_get_buf", args: [_codeData]);
   }
 
   /// since: 5
-  Future<void> Nvim_win_set_buf(Neovim neovim, Buffer buffer) {
+  Future<void> winSetBuf(Neovim neovim, Buffer buffer) {
     return neovim.session.call("nvim_win_set_buf", args: [_codeData, buffer]);
   }
 
   /// since: 1
-  Future<List<int>> Nvim_win_get_cursor(
+  Future<List<int>> winGetCursor(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_get_cursor", args: [_codeData]);
   }
 
   /// since: 1
-  Future<void> Nvim_win_set_cursor(Neovim neovim, List<int> pos) {
+  Future<void> winSetCursor(Neovim neovim, List<int> pos) {
     return neovim.session.call("nvim_win_set_cursor", args: [_codeData, pos]);
   }
 
   /// since: 1
-  Future<int> Nvim_win_get_height(
+  Future<int> winGetHeight(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_get_height", args: [_codeData]);
   }
 
   /// since: 1
-  Future<void> Nvim_win_set_height(Neovim neovim, int height) {
+  Future<void> winSetHeight(Neovim neovim, int height) {
     return neovim.session
         .call("nvim_win_set_height", args: [_codeData, height]);
   }
 
   /// since: 1
-  Future<int> Nvim_win_get_width(
+  Future<int> winGetWidth(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_get_width", args: [_codeData]);
   }
 
   /// since: 1
-  Future<void> Nvim_win_set_width(Neovim neovim, int width) {
+  Future<void> winSetWidth(Neovim neovim, int width) {
     return neovim.session.call("nvim_win_set_width", args: [_codeData, width]);
   }
 
   /// since: 1
-  Future<dynamic> Nvim_win_get_var(Neovim neovim, String name) {
+  Future<dynamic> winGetVar(Neovim neovim, String name) {
     return neovim.session.call("nvim_win_get_var", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<void> Nvim_win_set_var(Neovim neovim, String name, dynamic value) {
+  Future<void> winSetVar(Neovim neovim, String name, dynamic value) {
     return neovim.session
         .call("nvim_win_set_var", args: [_codeData, name, value]);
   }
 
   /// since: 1
-  Future<void> Nvim_win_del_var(Neovim neovim, String name) {
+  Future<void> winDelVar(Neovim neovim, String name) {
     return neovim.session.call("nvim_win_del_var", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<dynamic> Nvim_win_get_option(Neovim neovim, String name) {
+  Future<dynamic> winGetOption(Neovim neovim, String name) {
     return neovim.session.call("nvim_win_get_option", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<void> Nvim_win_set_option(Neovim neovim, String name, dynamic value) {
+  Future<void> winSetOption(Neovim neovim, String name, dynamic value) {
     return neovim.session
         .call("nvim_win_set_option", args: [_codeData, name, value]);
   }
 
   /// since: 1
-  Future<List<int>> Nvim_win_get_position(
+  Future<List<int>> winGetPosition(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_get_position", args: [_codeData]);
   }
 
   /// since: 1
-  Future<Tabpage> Nvim_win_get_tabpage(
+  Future<Tabpage> winGetTabpage(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_get_tabpage", args: [_codeData]);
   }
 
   /// since: 1
-  Future<int> Nvim_win_get_number(
+  Future<int> winGetNumber(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_get_number", args: [_codeData]);
   }
 
   /// since: 1
-  Future<bool> Nvim_win_is_valid(
+  Future<bool> winIsValid(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_is_valid", args: [_codeData]);
   }
 
   /// since: 6
-  Future<void> Nvim_win_set_config(
-      Neovim neovim, Map<dynamic, dynamic> config) {
+  Future<void> winSetConfig(Neovim neovim, Map<dynamic, dynamic> config) {
     return neovim.session
         .call("nvim_win_set_config", args: [_codeData, config]);
   }
 
   /// since: 6
-  Future<Map<dynamic, dynamic>> Nvim_win_get_config(
+  Future<Map<dynamic, dynamic>> winGetConfig(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_win_get_config", args: [_codeData]);
   }
 
   /// since: 6
-  Future<void> Nvim_win_close(Neovim neovim, bool force) {
+  Future<void> winClose(Neovim neovim, bool force) {
     return neovim.session.call("nvim_win_close", args: [_codeData, force]);
   }
 }
@@ -324,44 +322,44 @@ class Tabpage {
   Tabpage(this._codeData);
 
   /// since: 1
-  Future<List<Window>> Nvim_tabpage_list_wins(
+  Future<List<Window>> tabpageListWins(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_tabpage_list_wins", args: [_codeData]);
   }
 
   /// since: 1
-  Future<dynamic> Nvim_tabpage_get_var(Neovim neovim, String name) {
+  Future<dynamic> tabpageGetVar(Neovim neovim, String name) {
     return neovim.session.call("nvim_tabpage_get_var", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<void> Nvim_tabpage_set_var(Neovim neovim, String name, dynamic value) {
+  Future<void> tabpageSetVar(Neovim neovim, String name, dynamic value) {
     return neovim.session
         .call("nvim_tabpage_set_var", args: [_codeData, name, value]);
   }
 
   /// since: 1
-  Future<void> Nvim_tabpage_del_var(Neovim neovim, String name) {
+  Future<void> tabpageDelVar(Neovim neovim, String name) {
     return neovim.session.call("nvim_tabpage_del_var", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<Window> Nvim_tabpage_get_win(
+  Future<Window> tabpageGetWin(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_tabpage_get_win", args: [_codeData]);
   }
 
   /// since: 1
-  Future<int> Nvim_tabpage_get_number(
+  Future<int> tabpageGetNumber(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_tabpage_get_number", args: [_codeData]);
   }
 
   /// since: 1
-  Future<bool> Nvim_tabpage_is_valid(
+  Future<bool> tabpageIsValid(
     Neovim neovim,
   ) {
     return neovim.session.call("nvim_tabpage_is_valid", args: [_codeData]);
@@ -380,12 +378,14 @@ class Neovim {
   Neovim({String nvimBinaryPath})
       : _session = Session(nvim: nvimBinaryPath ?? '/usr/bin/nvim');
 
+  /// since: 1
   Future<void> uiDetach() async {
     var retVal = await _session.call("nvim_ui_detach", args: []);
 
     return retVal;
   }
 
+  /// since: 1
   Future<void> uiTryResize(int width, int height) async {
     var retVal =
         await _session.call("nvim_ui_try_resize", args: [width, height]);
@@ -393,12 +393,14 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> uiSetOption(String name, dynamic value) async {
     var retVal = await _session.call("nvim_ui_set_option", args: [name, value]);
 
     return retVal;
   }
 
+  /// since: 6
   Future<void> uiTryResizeGrid(int grid, int width, int height) async {
     var retVal = await _session
         .call("nvim_ui_try_resize_grid", args: [grid, width, height]);
@@ -406,18 +408,21 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<void> uiPumSetHeight(int height) async {
     var retVal = await _session.call("nvim_ui_pum_set_height", args: [height]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<void> command(String command) async {
     var retVal = await _session.call("nvim_command", args: [command]);
 
     return retVal;
   }
 
+  /// since: 3
   Future<Map<dynamic, dynamic>> getHlByName(String name, bool rgb) async {
     var retVal = await _session.call("nvim_get_hl_by_name", args: [name, rgb]);
 
@@ -426,6 +431,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 3
   Future<Map<dynamic, dynamic>> getHlById(int hl_id, bool rgb) async {
     var retVal = await _session.call("nvim_get_hl_by_id", args: [hl_id, rgb]);
 
@@ -434,6 +440,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> feedkeys(String keys, String mode, bool escape_csi) async {
     var retVal =
         await _session.call("nvim_feedkeys", args: [keys, mode, escape_csi]);
@@ -441,6 +448,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<int> input(String keys) async {
     var retVal = await _session.call("nvim_input", args: [keys]);
 
@@ -449,6 +457,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<void> inputMouse(String button, String action, String modifier,
       int grid, int row, int col) async {
     var retVal = await _session.call("nvim_input_mouse",
@@ -457,6 +466,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<String> replaceTermcodes(
       String str, bool from_part, bool do_lt, bool special) async {
     var retVal = await _session
@@ -467,6 +477,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<String> commandOutput(String command) async {
     var retVal = await _session.call("nvim_command_output", args: [command]);
 
@@ -475,6 +486,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<dynamic> eval(String expr) async {
     var retVal = await _session.call("nvim_eval", args: [expr]);
 
@@ -483,6 +495,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 3
   Future<dynamic> executeLua(String code, List<dynamic> args) async {
     var retVal = await _session.call("nvim_execute_lua", args: [code, args]);
 
@@ -491,6 +504,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<dynamic> callFunction(String fn, List<dynamic> args) async {
     var retVal = await _session.call("nvim_call_function", args: [fn, args]);
 
@@ -499,6 +513,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 4
   Future<dynamic> callDictFunction(
       dynamic dict, String fn, List<dynamic> args) async {
     var retVal =
@@ -509,6 +524,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<int> strwidth(String text) async {
     var retVal = await _session.call("nvim_strwidth", args: [text]);
 
@@ -517,6 +533,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<List<String>> listRuntimePaths() async {
     var retVal = await _session.call("nvim_list_runtime_paths", args: []);
 
@@ -525,12 +542,14 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> setCurrentDir(String dir) async {
     var retVal = await _session.call("nvim_set_current_dir", args: [dir]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<String> getCurrentLine() async {
     var retVal = await _session.call("nvim_get_current_line", args: []);
 
@@ -539,18 +558,21 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> setCurrentLine(String line) async {
     var retVal = await _session.call("nvim_set_current_line", args: [line]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<void> delCurrentLine() async {
     var retVal = await _session.call("nvim_del_current_line", args: []);
 
     return retVal;
   }
 
+  /// since: 1
   Future<dynamic> getVar(String name) async {
     var retVal = await _session.call("nvim_get_var", args: [name]);
 
@@ -559,18 +581,21 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> setVar(String name, dynamic value) async {
     var retVal = await _session.call("nvim_set_var", args: [name, value]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<void> delVar(String name) async {
     var retVal = await _session.call("nvim_del_var", args: [name]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<dynamic> getVvar(String name) async {
     var retVal = await _session.call("nvim_get_vvar", args: [name]);
 
@@ -579,12 +604,14 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<void> setVvar(String name, dynamic value) async {
     var retVal = await _session.call("nvim_set_vvar", args: [name, value]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<dynamic> getOption(String name) async {
     var retVal = await _session.call("nvim_get_option", args: [name]);
 
@@ -593,30 +620,35 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> setOption(String name, dynamic value) async {
     var retVal = await _session.call("nvim_set_option", args: [name, value]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<void> outWrite(String str) async {
     var retVal = await _session.call("nvim_out_write", args: [str]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<void> errWrite(String str) async {
     var retVal = await _session.call("nvim_err_write", args: [str]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<void> errWriteln(String str) async {
     var retVal = await _session.call("nvim_err_writeln", args: [str]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<List<Buffer>> listBufs() async {
     var retVal = await _session.call("nvim_list_bufs", args: []);
 
@@ -625,6 +657,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<Buffer> getCurrentBuf() async {
     var retVal = await _session.call("nvim_get_current_buf", args: []);
 
@@ -633,6 +666,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> setCurrentBuf(Buffer buffer) async {
     var retVal =
         await _session.call("nvim_set_current_buf", args: [buffer.codeData]);
@@ -640,6 +674,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<List<Window>> listWins() async {
     var retVal = await _session.call("nvim_list_wins", args: []);
 
@@ -648,6 +683,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<Window> getCurrentWin() async {
     var retVal = await _session.call("nvim_get_current_win", args: []);
 
@@ -656,6 +692,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> setCurrentWin(Window window) async {
     var retVal =
         await _session.call("nvim_set_current_win", args: [window.codeData]);
@@ -663,6 +700,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<Buffer> createBuf(bool listed, bool scratch) async {
     var retVal =
         await _session.call("nvim_create_buf", args: [listed, scratch]);
@@ -672,6 +710,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<Window> openWin(
       Buffer buffer, bool enter, Map<dynamic, dynamic> config) async {
     var retVal = await _session
@@ -682,6 +721,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<List<Tabpage>> listTabpages() async {
     var retVal = await _session.call("nvim_list_tabpages", args: []);
 
@@ -690,6 +730,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<Tabpage> getCurrentTabpage() async {
     var retVal = await _session.call("nvim_get_current_tabpage", args: []);
 
@@ -698,6 +739,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> setCurrentTabpage(Tabpage tabpage) async {
     var retVal = await _session
         .call("nvim_set_current_tabpage", args: [tabpage.codeData]);
@@ -705,6 +747,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 5
   Future<int> createNamespace(String name) async {
     var retVal = await _session.call("nvim_create_namespace", args: [name]);
 
@@ -713,6 +756,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 5
   Future<Map<dynamic, dynamic>> getNamespaces() async {
     var retVal = await _session.call("nvim_get_namespaces", args: []);
 
@@ -721,6 +765,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<bool> paste(String data, bool crlf, int phase) async {
     var retVal = await _session.call("nvim_paste", args: [data, crlf, phase]);
 
@@ -729,6 +774,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<void> put(
       List<String> lines, String type, bool after, bool follow) async {
     var retVal =
@@ -737,18 +783,21 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<void> subscribe(String event) async {
     var retVal = await _session.call("nvim_subscribe", args: [event]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<void> unsubscribe(String event) async {
     var retVal = await _session.call("nvim_unsubscribe", args: [event]);
 
     return retVal;
   }
 
+  /// since: 1
   Future<int> getColorByName(String name) async {
     var retVal = await _session.call("nvim_get_color_by_name", args: [name]);
 
@@ -757,6 +806,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<Map<dynamic, dynamic>> getColorMap() async {
     var retVal = await _session.call("nvim_get_color_map", args: []);
 
@@ -765,6 +815,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<Map<dynamic, dynamic>> getContext(Map<dynamic, dynamic> opts) async {
     var retVal = await _session.call("nvim_get_context", args: [opts]);
 
@@ -773,6 +824,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<dynamic> loadContext(Map<dynamic, dynamic> dict) async {
     var retVal = await _session.call("nvim_load_context", args: [dict]);
 
@@ -781,6 +833,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 2
   Future<Map<dynamic, dynamic>> getMode() async {
     var retVal = await _session.call("nvim_get_mode", args: []);
 
@@ -789,6 +842,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 3
   Future<List<Map<dynamic, dynamic>>> getKeymap(String mode) async {
     var retVal = await _session.call("nvim_get_keymap", args: [mode]);
 
@@ -797,6 +851,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<void> setKeymap(
       String mode, String lhs, String rhs, Map<dynamic, dynamic> opts) async {
     var retVal =
@@ -805,12 +860,14 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<void> delKeymap(String mode, String lhs) async {
     var retVal = await _session.call("nvim_del_keymap", args: [mode, lhs]);
 
     return retVal;
   }
 
+  /// since: 4
   Future<Map<dynamic, dynamic>> getCommands(Map<dynamic, dynamic> opts) async {
     var retVal = await _session.call("nvim_get_commands", args: [opts]);
 
@@ -819,6 +876,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<List<dynamic>> getApiInfo() async {
     var retVal = await _session.call("nvim_get_api_info", args: []);
 
@@ -827,6 +885,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 4
   Future<void> setClientInfo(
       String name,
       Map<dynamic, dynamic> version,
@@ -839,6 +898,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 4
   Future<Map<dynamic, dynamic>> getChanInfo(int chan) async {
     var retVal = await _session.call("nvim_get_chan_info", args: [chan]);
 
@@ -847,6 +907,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 4
   Future<List<dynamic>> listChans() async {
     var retVal = await _session.call("nvim_list_chans", args: []);
 
@@ -855,6 +916,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 1
   Future<List<dynamic>> callAtomic(List<dynamic> calls) async {
     var retVal = await _session.call("nvim_call_atomic", args: [calls]);
 
@@ -863,6 +925,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 4
   Future<Map<dynamic, dynamic>> parseExpression(
       String expr, String flags, bool highlight) async {
     var retVal = await _session
@@ -873,6 +936,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 4
   Future<List<dynamic>> listUis() async {
     var retVal = await _session.call("nvim_list_uis", args: []);
 
@@ -881,6 +945,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 4
   Future<List<dynamic>> getProcChildren(int pid) async {
     var retVal = await _session.call("nvim_get_proc_children", args: [pid]);
 
@@ -889,6 +954,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 4
   Future<dynamic> getProc(int pid) async {
     var retVal = await _session.call("nvim_get_proc", args: [pid]);
 
@@ -897,6 +963,7 @@ class Neovim {
     return retVal;
   }
 
+  /// since: 6
   Future<void> selectPopupmenuItem(
       int item, bool insert, bool finish, Map<dynamic, dynamic> opts) async {
     var retVal = await _session
