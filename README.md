@@ -10,13 +10,13 @@ I do plan to (attempt) creating a blocking implementation, so feel free to open 
 on the topic if you have any suggestsions or want to help.
 
 # Contributing
-Changes to the `Neovim` class (and thus `lib/neovim.dart`) should be done
-in the template file `gen_bindings/neovim.dart`. To generate `lib/neovim.dart` do 
-the following (requires `pip` in addition to `python` v3.7.4. Note that older versions 
+Changes to the `Neovim` class (and other changes in `lib/dart_nvim_api.dart`) should be done
+in the template file `gen_bindings/dart_nvim_api.dart`. To generate `lib/dart_nvim_api.dart` do 
+the following from the project root (requires `pip` in addition to `python` v3.7.4. Note that older versions 
 of Python 3 may work, I just haven't tested them):
 ```console
 $ pip install -g datetime jinja2
-# From root of project directory, replacing <nvim binary path> as necessary:
+# Replacing <nvim binary path> as necessary:
 $ python gen_bindings/gen_bindings.py <nvim binary path> 'lib/'
 ```
 Changes to any other files can be done as usual.

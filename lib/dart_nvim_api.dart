@@ -1,4 +1,4 @@
-// Generated 2019-10-19 12:55:54.029118 by `gen_bindings.py`.
+// Generated 2019-10-19 13:14:25.971132 by `gen_bindings.py`.
 // DO NOT MODIFY DIRECTLY!
 
 import 'dart:async';

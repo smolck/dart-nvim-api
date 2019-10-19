@@ -1,4 +1,4 @@
-import 'package:dart_nvim_api/neovim.dart';
+import 'package:dart_nvim_api/dart_nvim_api.dart';
 import 'package:test/test.dart';
 
 void main() {
