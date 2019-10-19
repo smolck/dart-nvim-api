@@ -12,7 +12,7 @@ import re
 import datetime
 import string
 
-INPUT = 'bindings_gen'
+INPUT = 'gen_bindings'
 
 
 def make_camel_case(s):
