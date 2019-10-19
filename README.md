@@ -1,6 +1,6 @@
 # Dart Nvim API
-Neovim API implementation for [Dart](dart.dev). Still a WIP, so
-any feedback, contributions, etc. are greatly appreciated.
+Neovim API implementation for [Dart](dart.dev), based on and inspired by [neovim-lib](https://github.com/daa84/neovim-lib).
+Still a WIP, so any feedback, contributions, etc. are greatly appreciated.
 
 __NOTE__: Currently, this library
 only supports _asynchronous_ calls to Neovim. This is due to how
