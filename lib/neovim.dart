@@ -1,10 +1,15 @@
-// Generated 2019-10-19 12:34:04.198322 by `gen_bindings.py`.
+// Generated 2019-10-19 12:55:54.029118 by `gen_bindings.py`.
 // DO NOT MODIFY DIRECTLY!
 
 import 'dart:async';
+
 import 'package:meta/meta.dart';
-import 'package:dart_nvim_api/session.dart';
-import 'package:dart_nvim_api/ui_attach_options.dart';
+
+import 'src/session.dart';
+import 'src/ui_attach_options.dart';
+
+export 'src/session.dart';
+export 'src/ui_attach_options.dart';
 
 class Buffer {
   dynamic _codeData;

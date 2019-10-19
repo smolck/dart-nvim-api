@@ -1,6 +1,4 @@
 import 'package:dart_nvim_api/neovim.dart';
-import 'package:dart_nvim_api/ui_attach_options.dart';
-import 'package:dart_nvim_api/session.dart';
 import 'package:test/test.dart';
 
 void main() {

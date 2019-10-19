@@ -2,9 +2,14 @@
 // DO NOT MODIFY DIRECTLY!
 
 import 'dart:async';
+
 import 'package:meta/meta.dart';
-import 'package:dart_nvim_api/session.dart';
-import 'package:dart_nvim_api/ui_attach_options.dart';
+
+import 'src/session.dart';
+import 'src/ui_attach_options.dart';
+
+export 'src/session.dart';
+export 'src/ui_attach_options.dart';
 
 {% for etype in exttypes %}
 class {{ etype.name }} {
