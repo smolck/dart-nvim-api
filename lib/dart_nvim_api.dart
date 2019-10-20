@@ -1,4 +1,4 @@
-// Generated 2019-10-19 17:57:00.948703 by `gen_bindings.py`.
+// Generated 2019-10-20 16:35:52.808307 by `gen_bindings.py`.
 // DO NOT MODIFY DIRECTLY!
 
 import 'dart:async';
@@ -377,6 +377,14 @@ class Neovim {
   }) : _session = Session.fromRunningInstance(host: host, port: port);
   Neovim({String nvimBinaryPath})
       : _session = Session(nvim: nvimBinaryPath ?? '/usr/bin/nvim');
+
+  Future attachUi(
+      {@required int width,
+      @required int height,
+      UiAttachOptions options}) async {
+    return await _session
+        .call("nvim_ui_attach", args: [width, height, options?.asMap()]);
+  }
 
   /// since: 1
   Future<void> uiDetach() async {

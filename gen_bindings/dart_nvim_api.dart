@@ -21,7 +21,7 @@ class {{ etype.name }} {
     {% for f in functions if f.ext and f.name.startswith(etype.prefix) %}
       {% set trimmedFname = f.name | replace('nvim_', '') %}
     /// since: {{ f.since }}
-    Future<{{ f.return_type.native_type_ret }}> {{ to_camel_case(trimmedFname) }}(Neovim neovim, {{ f.argstring }}) { 
+    Future<{{ f.return_type.native_type_ret }}> {{ to_camel_case(trimmedFname) }}(Neovim neovim, {{ f.argstring }}) {
     {% set trimmedFname = f.name | replace('nvim_', '') %}
         return neovim.session.call("{{f.name}}",
                           args: [_codeData
@@ -47,6 +47,10 @@ class Neovim {
   Neovim({String nvimBinaryPath})
       : _session = Session(nvim: nvimBinaryPath ?? '/usr/bin/nvim');
 
+  Future attachUi({@required int width, @required int height, UiAttachOptions options}) async {
+    return await _session.call("nvim_ui_attach", args: [width, height, options?.asMap()]);
+  }
+
   {% for f in functions if not f.ext %}
     {% set trimmedFname = f.name | replace('nvim_', '') %}
     /// since: {{ f.since }}
@@ -56,7 +60,7 @@ class Neovim {
 
         {% if "Map" in f.return_type.native_type_ret or "List" in f.return_type.native_type_ret %}
           retVal = {{ f.return_type.native_type_ret }}.from(retVal);
-        
+
         {% elif f.return_type.native_type_ret != "void" %}
           retVal = retVal as {{ f.return_type.native_type_ret }};
         {% endif %}
