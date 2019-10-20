@@ -1,8 +1,23 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
+import 'package:dart_nvim_api/dart_nvim_api.dart';
+
+class ExtTypeDecoder extends ExtDecoder {
+  dynamic decodeObject(int extType, Uint8List data) {
+    switch (extType) {
+      case 0: // ID for a `Buffer`
+        return Buffer(deserialize(data));
+      case 1: // ID for a `Window`
+        return Window(deserialize(data));
+      case 2: // ID for a `Tabpage`
+        return Tabpage(deserialize(data));
+    }
+  }
+}
 
 class Session {
   /// Neovim [Process] if [Session] is constructed via the default constructor.
@@ -47,7 +62,7 @@ class Session {
   /// Must only be called once.
   Future<void> _startListener({@required listenStdout}) async {
     final Function(List<int>) listener = (List<int> data) {
-      final List<dynamic> msg = deserialize(data);
+      final List<dynamic> msg = deserialize(data, extDecoder: ExtTypeDecoder());
       final int msgType = msg[0];
       final msgId =
           msg[1]; // Type here is `String` for notifications. Otherwise, `int`.
