@@ -97,7 +97,8 @@ class Session {
           _pendingResponses.entries.last.value.complete(msg[3]);
           break;
         case 2: // Message is a notification.
-          _pendingNotifications[msgId] = msg[3];
+          _pendingNotifications[msgId] =
+              msg[2]; // Notification array is shorter, so index 2 here.
           break;
       }
     };
@@ -171,7 +172,12 @@ class Session {
   /// to `null` if Neovim never responds (or responds with a request
   /// or notification).
   Future<dynamic> call(String function, {List<dynamic> args}) async {
-    final cmd = [0, _senderId, function, if (args != null) args else []];
+    final cmd = [
+      0,
+      _senderId,
+      function,
+      if (args != null) args else [],
+    ];
 
     if (_useStdin) {
       await _nvim
