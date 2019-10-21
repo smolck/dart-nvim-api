@@ -1,4 +1,4 @@
-// Generated 2019-10-20 16:35:52.808307 by `gen_bindings.py`.
+// Generated 2019-10-20 23:02:00.623554 by `gen_bindings.py`.
 // DO NOT MODIFY DIRECTLY!
 
 import 'dart:async';
@@ -366,11 +366,22 @@ class Tabpage {
   }
 }
 
+/// Represents an instance of Neovim which can be communicated with via
+/// methods.
 class Neovim {
   Session _session;
+
+  /// The Neovim session, which holds information such as pending
+  /// requests, responses, and notifications from Neovim, and which
+  /// also allows for direct communication with Neovim. See [Session]
+  /// class for more details.
   get session => _session;
 
+  /// Create a Neovim instance from a [Session] instance.
   Neovim.fromSession(this._session);
+
+  /// Communicate over TCP with an already-running Neovim instance
+  /// (i.e. a Neovim instance run with `--listen <host>:<port>`).
   Neovim.connectToRunningInstance({
     @required String host,
     @required int port,
@@ -378,6 +389,18 @@ class Neovim {
   Neovim({String nvimBinaryPath})
       : _session = Session(nvim: nvimBinaryPath ?? '/usr/bin/nvim');
 
+  /// From Neovim's `:help nvim_ui_attach()` documentation:
+  /// "Activates UI events on the channel."
+  ///
+  /// "Entry point of all UI clients. Allows |--embed| to continue
+  /// startup. Implies that the client is ready to show the UI. Adds
+  /// the client to the list of UIs. |nvim_list_uis()|"
+  ///
+  /// `width` and `height` are the requested screen columns and rows of the
+  /// Neovim session, respectively.
+  ///
+  /// `options` is an instance of [UiAttachOptions], which contains information
+  /// related to the UI; see Neovim's `:help ui-option` documentation.
   Future attachUi(
       {@required int width,
       @required int height,
