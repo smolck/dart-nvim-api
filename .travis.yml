@@ -3,7 +3,7 @@
 language: dart
 
 dart_task:
-  - dartanalyzer: --fatal-infos --fatal-warnings .
+  - dartanalyzer
 
 matrix:
   include:
