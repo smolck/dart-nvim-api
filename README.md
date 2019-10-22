@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.org/smolck/dart-nvim-api.svg?branch=master)
+[![Build Status](https://travis-ci.org/smolck/dart-nvim-api.svg?branch=master)](https://travis-ci.org/smolck/dart-nvim-api)
 
 # Dart Nvim API
 Neovim API implementation for [Dart](dart.dev), based on and inspired by [neovim-lib](https://github.com/daa84/neovim-lib).
