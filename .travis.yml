@@ -11,7 +11,7 @@ matrix:
     # Only validate formatting using the dev release
     - dart: dev
       script: 
-        - dartfmt lib test
+        - dartfmt -n lib test
 
 # Only building master means that we don't run two builds for each pull request.
 branches:
