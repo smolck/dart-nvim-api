@@ -1,39 +1,21 @@
-// Generated {{ date }} by `gen_bindings.py`.
+// Generated 2019-10-23 12:28:11.546414 by `gen_bindings.py`.
 // DO NOT MODIFY DIRECTLY!
 
 import 'dart:async';
 
 import 'package:meta/meta.dart';
 
+import 'src/tabpage.dart';
+import 'src/window.dart';
+import 'src/buffer.dart';
 import 'src/session.dart';
 import 'src/ui_attach_options.dart';
 
+export 'src/tabpage.dart';
+export 'src/window.dart';
+export 'src/buffer.dart';
 export 'src/session.dart';
 export 'src/ui_attach_options.dart';
-
-{% for etype in exttypes %}
-class {{ etype.name }} {
-    dynamic _codeData;
-    /// Internal value that represents the type.
-    get codeData => _codeData;
-    {{ etype.name }}(this._codeData);
-
-    {% for f in functions if f.ext and f.name.startswith(etype.prefix) %}
-      {% set trimmedFname = f.name | replace('nvim_', '') %}
-    /// since: {{ f.since }}
-    Future<{{ f.return_type.native_type_ret }}> {{ to_camel_case(trimmedFname) }}(Neovim neovim, {{ f.argstring }}) {
-    {% set trimmedFname = f.name | replace('nvim_', '') %}
-        return neovim.session.call("{{f.name}}",
-                          args: [_codeData
-                          {% if f.parameters|count > 0 %}
-                          , {{ f.parameters|map(attribute = "name")|join(", ") }}
-                          {% endif %}
-                          ]);
-    }
-    {% endfor %}
-}
-
-{% endfor %}
 
 /// Represents an instance of Neovim which can be communicated with via
 /// methods.

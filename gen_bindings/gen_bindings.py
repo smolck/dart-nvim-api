@@ -66,10 +66,10 @@ def get_api_info(nvim):
     return decutf8(msgpack.unpackb(info))
 
 
-def generate_file(name, outpath, **kw):
+def generate_file(name, outpath, location, **kw):
     from jinja2 import Environment, FileSystemLoader
     env = Environment(loader=FileSystemLoader(
-        INPUT), trim_blocks=True)
+        location), trim_blocks=True)
     template = env.get_template(name)
     with open(os.path.join(outpath, name), 'w') as fp:
         fp.write(template.render(kw))
@@ -241,14 +241,16 @@ def print_api(api):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) < 2 or len(sys.argv) > 3:
+    if len(sys.argv) < 2 or len(sys.argv) > 4:
         print('Usage:')
         print('\tgenerate_bindings <nvim>')
         print('\tgenerate_bindings <nvim> [path]')
+        print('\tgenerate_bindings <nvim> [path] [bindings_dir]')
         sys.exit(-1)
 
     nvim = sys.argv[1]
     outpath = None if len(sys.argv) < 3 else sys.argv[2]
+    directory = INPUT if len(sys.argv) < 4 else sys.argv[3]
 
     try:
         api = get_api_info(sys.argv[1])
@@ -260,7 +262,7 @@ if __name__ == '__main__':
         print('Writing auto generated bindings to %s' % outpath)
         if not os.path.exists(outpath):
             os.makedirs(outpath)
-        for name in os.listdir(INPUT):
+        for name in os.listdir(directory):
             if name.startswith('.'):
                 continue
             if name.endswith('.dart'):
@@ -276,7 +278,7 @@ if __name__ == '__main__':
                 env['exttypes'] = exttypes
                 env['to_camel_case'] = make_camel_case
                 env['make_args_from_params'] = make_args_from_params
-                generate_file(name, outpath, **env)
+                generate_file(name, outpath, directory, **env)
 
     else:
         print('Neovim api info:')

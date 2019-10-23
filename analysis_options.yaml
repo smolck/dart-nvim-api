@@ -6,3 +6,6 @@ include: package:pedantic/analysis_options.yaml
 analyzer:
   exclude:
     - gen_bindings/dart_nvim_api.dart
+      gen_bindings/src/buffer.dart
+      gen_bindings/src/tabpage.dart
+      gen_bindings/src/window.dart
