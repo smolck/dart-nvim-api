@@ -8,46 +8,61 @@ class Tabpage {
   Tabpage(this._codeData);
 
   /// since: 1
-  Future<List<Window>> tabpageListWins(
+  Future<List<Window>> listWins(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_tabpage_list_wins", args: [_codeData]);
+    var retVal =
+        neovim.session.call("nvim_tabpage_list_wins", args: [_codeData]);
+
+    retVal = List<Window>.from(retVal);
   }
 
   /// since: 1
-  Future<dynamic> tabpageGetVar(Neovim neovim, String name) {
-    return neovim.session.call("nvim_tabpage_get_var", args: [_codeData, name]);
+  Future<dynamic> getVar(Neovim neovim, String name) {
+    var retVal =
+        neovim.session.call("nvim_tabpage_get_var", args: [_codeData, name]);
+
+    retVal = retVal as dynamic;
   }
 
   /// since: 1
-  Future<void> tabpageSetVar(Neovim neovim, String name, dynamic value) {
-    return neovim.session
+  Future<void> setVar(Neovim neovim, String name, dynamic value) {
+    var retVal = neovim.session
         .call("nvim_tabpage_set_var", args: [_codeData, name, value]);
   }
 
   /// since: 1
-  Future<void> tabpageDelVar(Neovim neovim, String name) {
-    return neovim.session.call("nvim_tabpage_del_var", args: [_codeData, name]);
+  Future<void> delVar(Neovim neovim, String name) {
+    var retVal =
+        neovim.session.call("nvim_tabpage_del_var", args: [_codeData, name]);
   }
 
   /// since: 1
-  Future<Window> tabpageGetWin(
+  Future<Window> getWin(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_tabpage_get_win", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_tabpage_get_win", args: [_codeData]);
+
+    retVal = retVal as Window;
   }
 
   /// since: 1
-  Future<int> tabpageGetNumber(
+  Future<int> getNumber(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_tabpage_get_number", args: [_codeData]);
+    var retVal =
+        neovim.session.call("nvim_tabpage_get_number", args: [_codeData]);
+
+    retVal = retVal as int;
   }
 
   /// since: 1
-  Future<bool> tabpageIsValid(
+  Future<bool> isValid(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_tabpage_is_valid", args: [_codeData]);
+    var retVal =
+        neovim.session.call("nvim_tabpage_is_valid", args: [_codeData]);
+
+    retVal = retVal as bool;
   }
 }

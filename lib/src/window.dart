@@ -8,124 +8,194 @@ class Window {
   Window(this._codeData);
 
   /// since: 1
-  Future<Buffer> winGetBuf(
+  Future<Buffer> getBuf(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_get_buf", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_win_get_buf", args: [_codeData]);
+
+    retVal = retVal as Buffer;
+
+    return retVal;
   }
 
   /// since: 5
-  Future<void> winSetBuf(Neovim neovim, Buffer buffer) {
-    return neovim.session.call("nvim_win_set_buf", args: [_codeData, buffer]);
+  Future<void> setBuf(Neovim neovim, Buffer buffer) {
+    var retVal =
+        neovim.session.call("nvim_win_set_buf", args: [_codeData, buffer]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<List<int>> winGetCursor(
+  Future<List<int>> getCursor(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_get_cursor", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_win_get_cursor", args: [_codeData]);
+
+    retVal = List<int>.from(retVal);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> winSetCursor(Neovim neovim, List<int> pos) {
-    return neovim.session.call("nvim_win_set_cursor", args: [_codeData, pos]);
+  Future<void> setCursor(Neovim neovim, List<int> pos) {
+    var retVal =
+        neovim.session.call("nvim_win_set_cursor", args: [_codeData, pos]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<int> winGetHeight(
+  Future<int> getHeight(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_get_height", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_win_get_height", args: [_codeData]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> winSetHeight(Neovim neovim, int height) {
-    return neovim.session
-        .call("nvim_win_set_height", args: [_codeData, height]);
+  Future<void> setHeight(Neovim neovim, int height) {
+    var retVal =
+        neovim.session.call("nvim_win_set_height", args: [_codeData, height]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<int> winGetWidth(
+  Future<int> getWidth(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_get_width", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_win_get_width", args: [_codeData]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> winSetWidth(Neovim neovim, int width) {
-    return neovim.session.call("nvim_win_set_width", args: [_codeData, width]);
+  Future<void> setWidth(Neovim neovim, int width) {
+    var retVal =
+        neovim.session.call("nvim_win_set_width", args: [_codeData, width]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<dynamic> winGetVar(Neovim neovim, String name) {
-    return neovim.session.call("nvim_win_get_var", args: [_codeData, name]);
+  Future<dynamic> getVar(Neovim neovim, String name) {
+    var retVal =
+        neovim.session.call("nvim_win_get_var", args: [_codeData, name]);
+
+    retVal = retVal as dynamic;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> winSetVar(Neovim neovim, String name, dynamic value) {
-    return neovim.session
-        .call("nvim_win_set_var", args: [_codeData, name, value]);
+  Future<void> setVar(Neovim neovim, String name, dynamic value) {
+    var retVal =
+        neovim.session.call("nvim_win_set_var", args: [_codeData, name, value]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> winDelVar(Neovim neovim, String name) {
-    return neovim.session.call("nvim_win_del_var", args: [_codeData, name]);
+  Future<void> delVar(Neovim neovim, String name) {
+    var retVal =
+        neovim.session.call("nvim_win_del_var", args: [_codeData, name]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<dynamic> winGetOption(Neovim neovim, String name) {
-    return neovim.session.call("nvim_win_get_option", args: [_codeData, name]);
+  Future<dynamic> getOption(Neovim neovim, String name) {
+    var retVal =
+        neovim.session.call("nvim_win_get_option", args: [_codeData, name]);
+
+    retVal = retVal as dynamic;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> winSetOption(Neovim neovim, String name, dynamic value) {
-    return neovim.session
+  Future<void> setOption(Neovim neovim, String name, dynamic value) {
+    var retVal = neovim.session
         .call("nvim_win_set_option", args: [_codeData, name, value]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<List<int>> winGetPosition(
+  Future<List<int>> getPosition(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_get_position", args: [_codeData]);
+    var retVal =
+        neovim.session.call("nvim_win_get_position", args: [_codeData]);
+
+    retVal = List<int>.from(retVal);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<Tabpage> winGetTabpage(
+  Future<Tabpage> getTabpage(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_get_tabpage", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_win_get_tabpage", args: [_codeData]);
+
+    retVal = retVal as Tabpage;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<int> winGetNumber(
+  Future<int> getNumber(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_get_number", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_win_get_number", args: [_codeData]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<bool> winIsValid(
+  Future<bool> isValid(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_is_valid", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_win_is_valid", args: [_codeData]);
+
+    retVal = retVal as bool;
+
+    return retVal;
   }
 
   /// since: 6
-  Future<void> winSetConfig(Neovim neovim, Map<dynamic, dynamic> config) {
-    return neovim.session
-        .call("nvim_win_set_config", args: [_codeData, config]);
+  Future<void> setConfig(Neovim neovim, Map<dynamic, dynamic> config) {
+    var retVal =
+        neovim.session.call("nvim_win_set_config", args: [_codeData, config]);
+
+    return retVal;
   }
 
   /// since: 6
-  Future<Map<dynamic, dynamic>> winGetConfig(
+  Future<Map<dynamic, dynamic>> getConfig(
     Neovim neovim,
   ) {
-    return neovim.session.call("nvim_win_get_config", args: [_codeData]);
+    var retVal = neovim.session.call("nvim_win_get_config", args: [_codeData]);
+
+    retVal = Map<dynamic, dynamic>.from(retVal);
+
+    return retVal;
   }
 
   /// since: 6
-  Future<void> winClose(Neovim neovim, bool force) {
-    return neovim.session.call("nvim_win_close", args: [_codeData, force]);
+  Future<void> close(Neovim neovim, bool force) {
+    var retVal =
+        neovim.session.call("nvim_win_close", args: [_codeData, force]);
+
+    return retVal;
   }
 }

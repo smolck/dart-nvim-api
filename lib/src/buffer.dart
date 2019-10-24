@@ -8,167 +8,268 @@ class Buffer {
   Buffer(this._codeData);
 
   /// since: 1
-  Future<int> bufLineCount(
+  Future<int> lineCount(
     Neovim neovim,
-  ) {
-    return neovim.session.call("nvim_buf_line_count", args: [_codeData]);
+  ) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_line_count", args: [_codeData]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 
   /// since: 4
-  Future<bool> bufAttach(
-      Neovim neovim, bool send_buffer, Map<dynamic, dynamic> opts) {
-    return neovim.session
+  Future<bool> attach(
+      Neovim neovim, bool send_buffer, Map<dynamic, dynamic> opts) async {
+    var retVal = await neovim.session
         .call("nvim_buf_attach", args: [_codeData, send_buffer, opts]);
+
+    retVal = retVal as bool;
+
+    return retVal;
   }
 
   /// since: 4
-  Future<bool> bufDetach(
+  Future<bool> detach(
     Neovim neovim,
-  ) {
-    return neovim.session.call("nvim_buf_detach", args: [_codeData]);
+  ) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_detach", args: [_codeData]);
+
+    retVal = retVal as bool;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<List<String>> bufGetLines(
-      Neovim neovim, int start, int end, bool strict_indexing) {
-    return neovim.session.call("nvim_buf_get_lines",
+  Future<List<String>> getLines(
+      Neovim neovim, int start, int end, bool strict_indexing) async {
+    var retVal = await neovim.session.call("nvim_buf_get_lines",
         args: [_codeData, start, end, strict_indexing]);
+
+    retVal = List<String>.from(retVal);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> bufSetLines(Neovim neovim, int start, int end,
-      bool strict_indexing, List<String> replacement) {
-    return neovim.session.call("nvim_buf_set_lines",
+  Future<void> setLines(Neovim neovim, int start, int end, bool strict_indexing,
+      List<String> replacement) async {
+    var retVal = await neovim.session.call("nvim_buf_set_lines",
         args: [_codeData, start, end, strict_indexing, replacement]);
+
+    return retVal;
   }
 
   /// since: 5
-  Future<int> bufGetOffset(Neovim neovim, int index) {
-    return neovim.session.call("nvim_buf_get_offset", args: [_codeData, index]);
+  Future<int> getOffset(Neovim neovim, int index) async {
+    var retVal = await neovim.session
+        .call("nvim_buf_get_offset", args: [_codeData, index]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<dynamic> bufGetVar(Neovim neovim, String name) {
-    return neovim.session.call("nvim_buf_get_var", args: [_codeData, name]);
+  Future<dynamic> getVar(Neovim neovim, String name) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_get_var", args: [_codeData, name]);
+
+    retVal = retVal as dynamic;
+
+    return retVal;
   }
 
   /// since: 2
-  Future<int> bufGetChangedtick(
+  Future<int> getChangedtick(
     Neovim neovim,
-  ) {
-    return neovim.session.call("nvim_buf_get_changedtick", args: [_codeData]);
+  ) async {
+    var retVal = await neovim.session
+        .call("nvim_buf_get_changedtick", args: [_codeData]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 
   /// since: 3
-  Future<List<Map<dynamic, dynamic>>> bufGetKeymap(Neovim neovim, String mode) {
-    return neovim.session.call("nvim_buf_get_keymap", args: [_codeData, mode]);
+  Future<List<Map<dynamic, dynamic>>> getKeymap(
+      Neovim neovim, String mode) async {
+    var retVal = await neovim.session
+        .call("nvim_buf_get_keymap", args: [_codeData, mode]);
+
+    retVal = List<Map<dynamic, dynamic>>.from(retVal);
+
+    return retVal;
   }
 
   /// since: 6
-  Future<void> bufSetKeymap(Neovim neovim, String mode, String lhs, String rhs,
-      Map<dynamic, dynamic> opts) {
-    return neovim.session
+  Future<void> setKeymap(Neovim neovim, String mode, String lhs, String rhs,
+      Map<dynamic, dynamic> opts) async {
+    var retVal = await neovim.session
         .call("nvim_buf_set_keymap", args: [_codeData, mode, lhs, rhs, opts]);
+
+    return retVal;
   }
 
   /// since: 6
-  Future<void> bufDelKeymap(Neovim neovim, String mode, String lhs) {
-    return neovim.session
+  Future<void> delKeymap(Neovim neovim, String mode, String lhs) async {
+    var retVal = await neovim.session
         .call("nvim_buf_del_keymap", args: [_codeData, mode, lhs]);
+
+    return retVal;
   }
 
   /// since: 4
-  Future<Map<dynamic, dynamic>> bufGetCommands(
-      Neovim neovim, Map<dynamic, dynamic> opts) {
-    return neovim.session
+  Future<Map<dynamic, dynamic>> getCommands(
+      Neovim neovim, Map<dynamic, dynamic> opts) async {
+    var retVal = await neovim.session
         .call("nvim_buf_get_commands", args: [_codeData, opts]);
+
+    retVal = Map<dynamic, dynamic>.from(retVal);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> bufSetVar(Neovim neovim, String name, dynamic value) {
-    return neovim.session
+  Future<void> setVar(Neovim neovim, String name, dynamic value) async {
+    var retVal = await neovim.session
         .call("nvim_buf_set_var", args: [_codeData, name, value]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> bufDelVar(Neovim neovim, String name) {
-    return neovim.session.call("nvim_buf_del_var", args: [_codeData, name]);
+  Future<void> delVar(Neovim neovim, String name) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_del_var", args: [_codeData, name]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<dynamic> bufGetOption(Neovim neovim, String name) {
-    return neovim.session.call("nvim_buf_get_option", args: [_codeData, name]);
+  Future<dynamic> getOption(Neovim neovim, String name) async {
+    var retVal = await neovim.session
+        .call("nvim_buf_get_option", args: [_codeData, name]);
+
+    retVal = retVal as dynamic;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> bufSetOption(Neovim neovim, String name, dynamic value) {
-    return neovim.session
+  Future<void> setOption(Neovim neovim, String name, dynamic value) async {
+    var retVal = await neovim.session
         .call("nvim_buf_set_option", args: [_codeData, name, value]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<int> bufGetNumber(
+  Future<int> getNumber(
     Neovim neovim,
-  ) {
-    return neovim.session.call("nvim_buf_get_number", args: [_codeData]);
+  ) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_get_number", args: [_codeData]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<String> bufGetName(
+  Future<String> getName(
     Neovim neovim,
-  ) {
-    return neovim.session.call("nvim_buf_get_name", args: [_codeData]);
+  ) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_get_name", args: [_codeData]);
+
+    retVal = retVal as String;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> bufSetName(Neovim neovim, String name) {
-    return neovim.session.call("nvim_buf_set_name", args: [_codeData, name]);
+  Future<void> setName(Neovim neovim, String name) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_set_name", args: [_codeData, name]);
+
+    return retVal;
   }
 
   /// since: 5
-  Future<bool> bufIsLoaded(
+  Future<bool> isLoaded(
     Neovim neovim,
-  ) {
-    return neovim.session.call("nvim_buf_is_loaded", args: [_codeData]);
+  ) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_is_loaded", args: [_codeData]);
+
+    retVal = retVal as bool;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<bool> bufIsValid(
+  Future<bool> isValid(
     Neovim neovim,
-  ) {
-    return neovim.session.call("nvim_buf_is_valid", args: [_codeData]);
+  ) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_is_valid", args: [_codeData]);
+
+    retVal = retVal as bool;
+
+    return retVal;
   }
 
   /// since: 1
-  Future<List<int>> bufGetMark(Neovim neovim, String name) {
-    return neovim.session.call("nvim_buf_get_mark", args: [_codeData, name]);
+  Future<List<int>> getMark(Neovim neovim, String name) async {
+    var retVal =
+        await neovim.session.call("nvim_buf_get_mark", args: [_codeData, name]);
+
+    retVal = List<int>.from(retVal);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<int> bufAddHighlight(Neovim neovim, int ns_id, String hl_group,
-      int line, int col_start, int col_end) {
-    return neovim.session.call("nvim_buf_add_highlight",
+  Future<int> addHighlight(Neovim neovim, int ns_id, String hl_group, int line,
+      int col_start, int col_end) async {
+    var retVal = await neovim.session.call("nvim_buf_add_highlight",
         args: [_codeData, ns_id, hl_group, line, col_start, col_end]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 
   /// since: 5
-  Future<void> bufClearNamespace(
-      Neovim neovim, int ns_id, int line_start, int line_end) {
-    return neovim.session.call("nvim_buf_clear_namespace",
+  Future<void> clearNamespace(
+      Neovim neovim, int ns_id, int line_start, int line_end) async {
+    var retVal = await neovim.session.call("nvim_buf_clear_namespace",
         args: [_codeData, ns_id, line_start, line_end]);
+
+    return retVal;
   }
 
   /// since: 1
-  Future<void> bufClearHighlight(
-      Neovim neovim, int ns_id, int line_start, int line_end) {
-    return neovim.session.call("nvim_buf_clear_highlight",
+  Future<void> clearHighlight(
+      Neovim neovim, int ns_id, int line_start, int line_end) async {
+    var retVal = await neovim.session.call("nvim_buf_clear_highlight",
         args: [_codeData, ns_id, line_start, line_end]);
+
+    return retVal;
   }
 
   /// since: 5
-  Future<int> bufSetVirtualText(Neovim neovim, int ns_id, int line,
-      List<dynamic> chunks, Map<dynamic, dynamic> opts) {
-    return neovim.session.call("nvim_buf_set_virtual_text",
+  Future<int> setVirtualText(Neovim neovim, int ns_id, int line,
+      List<dynamic> chunks, Map<dynamic, dynamic> opts) async {
+    var retVal = await neovim.session.call("nvim_buf_set_virtual_text",
         args: [_codeData, ns_id, line, chunks, opts]);
+
+    retVal = retVal as int;
+
+    return retVal;
   }
 }
