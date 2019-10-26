@@ -60,17 +60,8 @@ class Neovim {
     {% set trimmedFname = f.name | replace('nvim_', '') %}
     /// since: {{ f.since }}
     Future<{{ f.return_type.native_type_ret }}> {{ to_camel_case(trimmedFname) }}({{ f.argstring }}) async {
-        var retVal = await _session.call("{{ f.name }}",
+        return _session.call<{{ f.return_type.native_type_ret }}>("{{ f.name }}",
           args: [{{ make_args_from_params(f.parameters) | map(attribute = "name") | join(", ") }}]);
-
-        {% if "Map" in f.return_type.native_type_ret or "List" in f.return_type.native_type_ret %}
-          retVal = {{ f.return_type.native_type_ret }}.from(retVal);
-
-        {% elif f.return_type.native_type_ret != "void" %}
-          retVal = retVal as {{ f.return_type.native_type_ret }};
-        {% endif %}
-
-        return retVal;
     }
 
     {% endfor %}

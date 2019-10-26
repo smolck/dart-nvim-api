@@ -140,38 +140,12 @@ class Session {
     _startListener(listenStdout: false);
   }
 
-  /// Sends (editor) `command` to Neovim.
-  ///
-  /// Returns response from Neovim as a [Future], which evaluates
-  /// to `null` if Neovim never responds (or responds with a request
-  /// or notification).
-  Future<dynamic> editor_command(String command) async {
-    final cmd = [
-      0,
-      _senderId,
-      'nvim_command',
-      [command]
-    ];
-
-    if (_useStdin) {
-      await _nvim
-        ..stdin.add(serialize(cmd));
-    } else {
-      await _socket
-        ..add(serialize(cmd));
-    }
-
-    final id = _senderId++;
-    pendingResponses[id] = Completer();
-    return _pendingResponses[id].future;
-  }
-
   /// Calls a Neovim API `function`, with optional `args`.
   ///
   /// Returns response from Neovim as a [Future], which evaluates
   /// to `null` if Neovim never responds (or responds with a request
   /// or notification).
-  Future<dynamic> call(String function, {List<dynamic> args}) async {
+  Future<T> call<T>(String function, {List<dynamic> args}) async {
     final cmd = [
       0,
       _senderId,
@@ -189,6 +163,6 @@ class Session {
 
     final id = _senderId++;
     _pendingResponses[id] = Completer();
-    return _pendingResponses[id].future;
+    return _pendingResponses[id].future.then((v) => v as T);
   }
 }

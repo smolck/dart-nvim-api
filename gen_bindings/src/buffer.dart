@@ -15,21 +15,12 @@ import 'package:dart_nvim_api/dart_nvim_api.dart';
           to_camel_case(trimmedFname) }}(Neovim neovim, {{ f.argstring }}) async
           {
         {% set trimmedFname = f.name | replace('nvim_', '') %}
-            var retVal = await neovim.session.call("{{f.name}}",
+            return neovim.session.call<{{ f.return_type.native_type_ret }}>("{{f.name}}",
                               args: [_codeData
                               {% if f.parameters|count > 0 %}
                               , {{ f.parameters|map(attribute = "name")|join(", ") }}
                               {% endif %}
                               ]);
-
-            {% if "Map" in f.return_type.native_type_ret or "List" in f.return_type.native_type_ret %}
-              retVal = {{ f.return_type.native_type_ret }}.from(retVal);
-
-            {% elif f.return_type.native_type_ret != "void" %}
-              retVal = retVal as {{ f.return_type.native_type_ret }};
-            {% endif %}
-
-            return retVal;
         }
         {% endfor %}
     }
