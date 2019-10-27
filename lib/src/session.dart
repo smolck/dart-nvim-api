@@ -97,6 +97,17 @@ class Session {
           _pendingResponses.entries.last.value.complete(msg[3]);
           break;
         case 2: // Message is a notification.
+          if (msg[1] == 'redraw') { // Special handling for 'redraw' events.
+            var messages = [];
+
+            var eventArr = msg[2];
+            for (var event in eventArr) {
+              messages.add(uiEvent(event[0], event[1]));
+            }
+
+            _pendingNotifications[msgId] = messages;
+            return;
+          }
           _pendingNotifications[msgId] =
               msg[2]; // Notification array is shorter, so index 2 here.
           break;

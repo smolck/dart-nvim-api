@@ -15,7 +15,19 @@ import string
 INPUT = 'gen_bindings'
 
 
-def make_camel_case(s):
+def to_pascal_case(s):
+    """
+    Formats the inputted snake_case string
+    in PascalCase.
+    """
+    new_str = s.replace('_', ' ')
+    new_str = new_str.split(' ')
+
+    new_str = string.capwords(' '.join(new_str[:]))
+    return new_str.replace(' ', '')
+
+
+def to_camel_case(s):
     """
     Formats the inputted snake_case string
     in camelCase.
@@ -144,6 +156,7 @@ class NeovimTypeVal:
         elif cls.UNBOUND_ARRAY.match(typename):
             m = cls.UNBOUND_ARRAY.match(typename)
             return 'List<%s>' % cls.nativeTypeVal(m.groups()[0])
+
         raise UnsupportedType(typename)
 
     @classmethod
@@ -212,6 +225,19 @@ class ExtType:
         self.prefix = info['prefix']
 
 
+class UiEvent:
+    def __init__(self, info):
+        self.parameters = []
+
+        parameters = info['parameters']
+        for parameter in parameters:
+            new_parameter = NeovimTypeVal.nativeTypeVal(parameter[0])
+            self.parameters.append([new_parameter, parameter[1]])
+
+        self.name = info['name']
+        self.since = info['since']
+
+
 def print_api(api):
     print(api.keys())
     for key in api.keys():
@@ -274,9 +300,18 @@ if __name__ == '__main__':
                 all_ext_prefixes = {exttype.prefix for exttype in exttypes}
                 functions = [Function(f, all_ext_prefixes)
                              for f in api['functions']]
+
+                ui_events = [UiEvent(event_info) for event_info in
+                             api['ui_events']]
+                env['ui_events'] = ui_events
+                # etc., etc. (thanks to @vhakulinen and @bfredl!)
+
                 env['functions'] = [f for f in functions if f.valid]
                 env['exttypes'] = exttypes
-                env['to_camel_case'] = make_camel_case
+
+                env['to_camel_case'] = to_camel_case
+                env['to_pascal_case'] = to_pascal_case
+
                 env['make_args_from_params'] = make_args_from_params
                 generate_file(name, outpath, directory, **env)
 
