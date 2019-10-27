@@ -98,34 +98,25 @@ class NeovimTypeVal:
     """
     Representation for Neovim Parameter/Return
     """
-    # msgpack simple types types
-    SIMPLETYPES_REF = {
-        'Array': 'List<dynamic>',
-        'ArrayOf(Integer, 2)': 'List<int>',
-        'void': 'void',
-        'Integer': 'int',
-        'Boolean': 'bool',
-        'String': 'String',
-        'Object': 'dynamic',
-        'Dictionary': 'Map<dynamic, dynamic>',
-    }
-
     SIMPLETYPES_VAL = {
         'Array': 'List<dynamic>',
         'ArrayOf(Integer, 2)': 'List<int>',
         'void': 'void',
         'Integer': 'int',
         'Boolean': 'bool',
+        'Float': 'double',
         'String': 'String',
         'Object': 'dynamic',
         'Dictionary': 'Map<dynamic, dynamic>',
     }
+
     # msgpack extension types
     EXTTYPES = {
         'Window': 'Window',
         'Buffer': 'Buffer',
         'Tabpage': 'Tabpage',
     }
+
     # Unbound Array types
     UNBOUND_ARRAY = re.compile('ArrayOf\(\s*(\w+)\s*\)')
 
@@ -133,15 +124,14 @@ class NeovimTypeVal:
         self.name = name
         self.neovim_type = typename
         self.ext = False
-        self.native_type_arg = NeovimTypeVal.nativeTypeRef(typename)
+
+        self.native_type_val = NeovimTypeVal.nativeTypeVal(typename)
         self.native_type_ret = NeovimTypeVal.nativeTypeVal(typename)
 
         if typename in self.EXTTYPES:
             self.ext = True
 
     def __getitem__(self, key):
-        if key == "native_type_arg":
-            return self.native_type_arg
         if key == "name":
             return self.name
         return None
@@ -157,18 +147,6 @@ class NeovimTypeVal:
             m = cls.UNBOUND_ARRAY.match(typename)
             return 'List<%s>' % cls.nativeTypeVal(m.groups()[0])
 
-        raise UnsupportedType(typename)
-
-    @classmethod
-    def nativeTypeRef(cls, typename):
-        """Return the native type for this Neovim type."""
-        if typename in cls.SIMPLETYPES_REF:
-            return cls.SIMPLETYPES_REF[typename]
-        elif typename in cls.EXTTYPES:
-            return "%s" % cls.EXTTYPES[typename]
-        elif cls.UNBOUND_ARRAY.match(typename):
-            m = cls.UNBOUND_ARRAY.match(typename)
-            return 'List<%s>' % cls.nativeTypeVal(m.groups()[0])
         raise UnsupportedType(typename)
 
 
@@ -201,7 +179,7 @@ class Function:
 
         # Build the argument string - makes it easier for the templates
         self.argstring = ', '.join(
-            ['%s %s' % (tv.native_type_arg, tv["name"]) for tv in self.parameters])
+            ['%s %s' % (tv.native_type_val, tv["name"]) for tv in self.parameters])
 
         # filter function, use only nvim one
         # nvim_ui_attach implemented manually
@@ -304,7 +282,6 @@ if __name__ == '__main__':
                 ui_events = [UiEvent(event_info) for event_info in
                              api['ui_events']]
                 env['ui_events'] = ui_events
-                # etc., etc. (thanks to @vhakulinen and @bfredl!)
 
                 env['functions'] = [f for f in functions if f.valid]
                 env['exttypes'] = exttypes
