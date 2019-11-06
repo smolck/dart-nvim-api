@@ -97,7 +97,8 @@ class Session {
           _pendingResponses.entries.last.value.complete(msg[3]);
           break;
         case 2: // Message is a notification.
-          if (msg[1] == 'redraw') { // Special handling for 'redraw' events.
+          if (msg[1] == 'redraw') {
+            // Special handling for 'redraw' events.
             var messages = [];
 
             var eventArr = msg[2];

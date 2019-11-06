@@ -34,16 +34,9 @@ main(List<String> args) async {
 
 # Contributing
 Changes to the `Neovim`, `Window`, `Buffer`, and `Tabpage` classes should be done
-in the template files in the `gen_bindings` and `gen_bindings/src` folders. To generate `lib/dart_nvim_api.dart` do 
+in the template files in the `gen_bindings/src` folder. To generate `lib/src/*.dart` do 
 the following from the project root (requires `pip` in addition to `python` v3.7.4. Note that older versions 
 of Python 3 may work, I just haven't tested them):
-```console
-$ pip install -g datetime jinja2
-# Replacing <nvim binary path> as necessary:
-$ python gen_bindings/gen_bindings.py <nvim binary path> 'lib/'
-```
-
-To generate `lib/src/*.dart` do the following from the project root (same dependencies required as above):
 ```console
 $ pip install -g datetime jinja2
 # Replacing <nvim binary path> as necessary:

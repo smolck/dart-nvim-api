@@ -49,7 +49,7 @@ def make_args_from_params(params):
     """
     params_clone = params[:]
     for val in params_clone:
-        if val.native_type_arg in NeovimTypeVal.EXTTYPES:
+        if val.native_type_val in NeovimTypeVal.EXTTYPES:
             val.name += '.codeData'
 
     return params_clone
