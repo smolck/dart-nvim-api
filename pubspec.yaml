@@ -1,6 +1,6 @@
 name: dart_nvim_api
 description: Neovim API for Dart
-version: 0.1.1
+version: 0.1.2
 author: smolck
 homepage: https://github.com/smolck/dart-nvim-api
 
