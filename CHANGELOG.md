@@ -18,7 +18,8 @@
     - Documentation for `Neovim` class (not finished yet, mainly waiting on [neovim/neovim#1139](https://github.com/neovim/neovim/pull/11396) and a subsequent PR adding a way to get
         the documentation on each API function from Neovim).
     - Classes for each type of `ui_event` from Neovim.
+    - `example` directory with a short example (shown in README).
 - Changes
     - Moved `Neovim` class from `lib/dart_nvim_api.dart` to `lib/src/neovim.dart`
         to be more consistent with idiomatic Dart library structure.
-    - Updated README to show latest library version from [pub.dev](http://pub.dev).
+    - Updated README to show latest library version from [pub.dev](http://pub.dev)
