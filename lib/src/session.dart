@@ -6,6 +6,29 @@ import 'package:meta/meta.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 import 'package:dart_nvim_api/dart_nvim_api.dart';
 
+/// Enum representing messagepack message types.
+enum Msg {
+  Request,
+  Response,
+  Notification,
+}
+
+/// Converts an integer `type` into a `Msg`.
+///
+/// Throws an [ArgumentError] if `type` is not between 0-2 inclusive.
+Msg _intToMsg(int type) {
+  switch (type) {
+    case 0:
+      return Msg.Request;
+    case 1:
+      return Msg.Response;
+    case 2:
+      return Msg.Notification;
+    default:
+      throw ArgumentError("`type` must be an integer between 0-2 inclusive.");
+  }
+}
+
 class ExtTypeDecoder extends ExtDecoder {
   dynamic decodeObject(int extType, Uint8List data) {
     switch (extType) {
@@ -23,7 +46,8 @@ class Session {
   /// Neovim [Process] if [Session] is constructed via the default constructor.
   /// Otherwise, `null`.
   final Future<Process> _nvim;
-  final bool _useStdin;
+  final bool _communicateStdin;
+  final bool _communicateNvimStdin;
 
   /// Id to use for sending messages to Neovim.
   int _senderId = 0;
@@ -60,7 +84,8 @@ class Session {
   /// adds listener for the Neovim [Process]'s stdout.
   ///
   /// Must only be called once.
-  Future<void> _startListener({@required listenStdout}) async {
+  Future<void> _startListener(
+      {@required listenStdin, @required listenNvimProcess}) async {
     final Function(List<int>) listener = (List<int> data) {
       final List<dynamic> msg = deserialize(data, extDecoder: ExtTypeDecoder());
       final int msgType = msg[0];
@@ -88,15 +113,15 @@ class Session {
         _pendingResponses[_senderId - 1].complete(null);
       }
 
-      switch (msgType) {
-        case 0: // Message is a request.
+      switch (_intToMsg(msgType)) {
+        case Msg.Request:
           _pendingRequests[msgId] = msg[3];
           break;
-        case 1: // Message is a response.
+        case Msg.Response:
           // Complete latest response.
           _pendingResponses.entries.last.value.complete(msg[3]);
           break;
-        case 2: // Message is a notification.
+        case Msg.Notification:
           if (msg[1] == 'redraw') {
             // Special handling for 'redraw' events.
             var messages = [];
@@ -115,7 +140,9 @@ class Session {
       }
     };
 
-    if (listenStdout) {
+    if (listenStdin) {
+      await stdin.listen(listener);
+    } else if (listenNvimProcess) {
       await _nvim
         ..stdout.listen(listener);
     } else {
@@ -130,14 +157,32 @@ class Session {
   Session({String nvim = 'nvim'})
       : _nvim = Process.start(nvim, ['--embed']),
         _socket = null,
-        _useStdin = true {
+        _communicateStdin = false,
+        _communicateNvimStdin = true {
     _pendingRequests = {};
     _pendingResponses = {};
     _pendingNotifications = {};
-    _startListener(listenStdout: true);
+    _startListener(listenStdin: false, listenNvimProcess: true);
   }
 
-  /// Create a [Session] by connecting to an already-running
+  /// Creates a [Session] by communicating to a Neovim
+  /// instance over the current stdin/stdout.
+  ///
+  /// Can be used to communicate with the running instance of
+  /// Neovim which started the current script via `:jobstart`,
+  /// for example.
+  Session.fromCurrentStdinStdout()
+      : _nvim = null,
+        _socket = null,
+        _communicateStdin = true,
+        _communicateNvimStdin = false {
+    _pendingRequests = {};
+    _pendingResponses = {};
+    _pendingNotifications = {};
+    _startListener(listenStdin: true, listenNvimProcess: false);
+  }
+
+  /// Creates a [Session] by connecting to an already-running
   /// Neovim instance created by running `$ nvim --listen <host>:<port>`.
   /// Defaults to localhost, a.k.a. `127.0.0.1:8888`.
   Session.fromRunningInstance({
@@ -145,11 +190,12 @@ class Session {
     int port = 8888,
   })  : _nvim = null,
         _socket = Socket.connect(host, port),
-        _useStdin = false {
+        _communicateStdin = false,
+        _communicateNvimStdin = false {
     _pendingRequests = {};
     _pendingResponses = {};
     _pendingNotifications = {};
-    _startListener(listenStdout: false);
+    _startListener(listenStdin: false, listenNvimProcess: false);
   }
 
   /// Calls a Neovim API `function`, with optional `args`.
@@ -165,7 +211,9 @@ class Session {
       if (args != null) args else [],
     ];
 
-    if (_useStdin) {
+    if (_communicateStdin) {
+      stdout.add(serialize(cmd));
+    } else if (_communicateNvimStdin) {
       await _nvim
         ..stdin.add(serialize(cmd));
     } else {
