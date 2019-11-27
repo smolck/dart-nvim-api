@@ -32,8 +32,17 @@ class Neovim {
     @required String host,
     @required int port,
   }) : _session = Session.fromRunningInstance(host: host, port: port);
-  Neovim({String nvimBinaryPath})
-      : _session = Session(nvim: nvimBinaryPath ?? '/usr/bin/nvim');
+
+  /// Start a [Neovim] instance using the optional `nvimBinaryPath` or
+  /// the default of 'usr/bin/nvim'.
+  ///
+  /// If `communicateWithParentProcess` is true, then return a [Neovim]
+  /// instance that receives events from and sends events to the Neovim
+  /// process which started the current process via `jobstart`.
+  Neovim({String nvimBinaryPath, bool communicateWithParentProcess})
+      : _session = communicateWithParentProcess
+            ? Session.fromCurrentStdinStdout()
+            : Session(nvim: nvimBinaryPath ?? '/usr/bin/nvim');
 
   /// From Neovim's `:help nvim_ui_attach()` documentation:
   /// "Activates UI events on the channel."
