@@ -23,3 +23,9 @@
     - Moved `Neovim` class from `lib/dart_nvim_api.dart` to `lib/src/neovim.dart`
         to be more consistent with idiomatic Dart library structure.
     - Updated README to show latest library version from [pub.dev](http://pub.dev)
+
+## 0.1.3
+
+- Added `Session.fromCurrentStdinStdout()` function and an optional flag
+    (`communicateWithParentProcess`) to the `Neovim` class (see docs for more
+    info).
