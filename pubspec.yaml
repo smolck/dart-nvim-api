@@ -1,6 +1,6 @@
 name: dart_nvim_api
-description: Neovim API for Dart
-version: 0.1.3
+description: A Neovim API for Dart allowing for communication between a Neovim instance and a Dart program. Can be used for creating Neovim plugins, Neovim frontend GUIs, etc.
+version: 0.1.4
 homepage: https://github.com/smolck/dart-nvim-api
 
 environment:

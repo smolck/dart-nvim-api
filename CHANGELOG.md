@@ -29,3 +29,9 @@
 - Added `Session.fromCurrentStdinStdout()` function and an optional flag
     (`communicateWithParentProcess`) to the `Neovim` class (see docs for more
     info).
+
+## 0.1.4
+
+- Fixed an issue where functions which returned `List`s (e.g.
+    `Buffer().getLines` would throw an error saying `type 'List<dynamic>'
+    is not a subtype of type 'List<String>' in type cast` or similar.
