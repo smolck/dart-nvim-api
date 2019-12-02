@@ -8,7 +8,6 @@ import 'package:meta/meta.dart';
 import 'tabpage.dart';
 import 'window.dart';
 import 'buffer.dart';
-import 'ui_events.dart';
 import 'session.dart';
 import 'ui_attach_options.dart';
 
