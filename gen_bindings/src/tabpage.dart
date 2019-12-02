@@ -14,12 +14,23 @@ import 'package:dart_nvim_api/dart_nvim_api.dart';
         Future<{{ f.return_type.native_type_ret }}> {{
           to_camel_case(trimmedFname) }}(Neovim neovim, {{ f.argstring }}) async {
         {% set trimmedFname = f.name | replace('nvim_', '') %}
-            return neovim.session.call<{{ f.return_type.native_type_ret }}>("{{f.name}}",
+            return neovim.session.call("{{f.name}}",
                               args: [_codeData
                               {% if f.parameters|count > 0 %}
                               , {{ f.parameters|map(attribute = "name")|join(", ") }}
                               {% endif %}
-                              ]);
+                              ])
+        {% if is_void(f.return_type.native_type_ret) %}
+          ;
+        {% else %}
+          .then<{{ f.return_type.native_type_ret }}>((v) =>
+          {% if is_list(f.return_type.native_type_ret) %}
+            (v as List).cast<{{ remove_wrapping_list(f.return_type.native_type_ret) }}>());
+          {% else %}
+            v as {{ f.return_type.native_type_ret }});
+          {% endif %}
+        {% endif %}
+
         }
         {% endfor %}
     }

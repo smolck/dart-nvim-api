@@ -20,7 +20,18 @@ import 'package:dart_nvim_api/dart_nvim_api.dart';
                               {% if f.parameters|count > 0 %}
                               , {{ f.parameters|map(attribute = "name")|join(", ") }}
                               {% endif %}
-                              ]);
+                              ])
+        {% if is_void(f.return_type.native_type_ret) %}
+          ;
+        {% else %}
+          .then<{{ f.return_type.native_type_ret }}>((v) =>
+          {% if is_list(f.return_type.native_type_ret) %}
+            (v as List).cast<{{ remove_wrapping_list(f.return_type.native_type_ret) }}>());
+          {% else %}
+            v as {{ f.return_type.native_type_ret }});
+          {% endif %}
+        {% endif %}
+
         }
         {% endfor %}
     }

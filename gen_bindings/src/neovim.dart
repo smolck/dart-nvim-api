@@ -32,8 +32,16 @@ class Neovim {
     @required String host,
     @required int port,
   }) : _session = Session.fromRunningInstance(host: host, port: port);
-  Neovim({String nvimBinaryPath})
-      : _session = Session(nvim: nvimBinaryPath ?? '/usr/bin/nvim');
+  /// Start a [Neovim] instance using the optional `nvimBinaryPath` or
+  /// the default of 'usr/bin/nvim'.
+  ///
+  /// If `communicateWithParentProcess` is true, then return a [Neovim]
+  /// instance that receives events from and sends events to the Neovim
+  /// process which started the current process via `jobstart`.
+  Neovim({String nvimBinaryPath, bool communicateWithParentProcess})
+      : _session = communicateWithParentProcess
+            ? Session.fromCurrentStdinStdout()
+            : Session(nvim: nvimBinaryPath ?? '/usr/bin/nvim');
 
   /// From Neovim's `:help nvim_ui_attach()` documentation:
   /// "Activates UI events on the channel."
@@ -55,8 +63,19 @@ class Neovim {
     {% set trimmedFname = f.name | replace('nvim_', '') %}
     /// since: {{ f.since }}
     Future<{{ f.return_type.native_type_ret }}> {{ to_camel_case(trimmedFname) }}({{ f.argstring }}) async {
-        return _session.call<{{ f.return_type.native_type_ret }}>("{{ f.name }}",
-          args: [{{ make_args_from_params(f.parameters) | map(attribute = "name") | join(", ") }}]);
+        return _session.call("{{ f.name }}",
+          args: [{{ make_args_from_params(f.parameters) | map(attribute =
+              "name") | join(", ") }}])
+        {% if is_void(f.return_type.native_type_ret) %}
+          ;
+        {% else %}
+          .then<{{ f.return_type.native_type_ret }}>((v) =>
+          {% if is_list(f.return_type.native_type_ret) %}
+            (v as List).cast<{{ remove_wrapping_list(f.return_type.native_type_ret) }}>());
+          {% else %}
+            v as {{ f.return_type.native_type_ret }});
+          {% endif %}
+        {% endif %}
     }
 
     {% endfor %}

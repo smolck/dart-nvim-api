@@ -11,7 +11,8 @@ class Window {
   Future<Buffer> getBuf(
     Neovim neovim,
   ) async {
-    neovim.session.call<Buffer>("nvim_win_get_buf", args: [_codeData]);
+    neovim.session.call<Buffer>("nvim_win_get_buf",
+        args: [_codeData]).then<Buffer>((v) => v as Buffer);
   }
 
   /// since: 5
@@ -23,7 +24,8 @@ class Window {
   Future<List<int>> getCursor(
     Neovim neovim,
   ) async {
-    neovim.session.call<List<int>>("nvim_win_get_cursor", args: [_codeData]);
+    neovim.session.call<List<int>>("nvim_win_get_cursor",
+        args: [_codeData]).then<List<int>>((v) => (v as List).cast<int>());
   }
 
   /// since: 1
@@ -35,7 +37,8 @@ class Window {
   Future<int> getHeight(
     Neovim neovim,
   ) async {
-    neovim.session.call<int>("nvim_win_get_height", args: [_codeData]);
+    neovim.session.call<int>("nvim_win_get_height",
+        args: [_codeData]).then<int>((v) => v as int);
   }
 
   /// since: 1
@@ -47,7 +50,8 @@ class Window {
   Future<int> getWidth(
     Neovim neovim,
   ) async {
-    neovim.session.call<int>("nvim_win_get_width", args: [_codeData]);
+    neovim.session.call<int>("nvim_win_get_width",
+        args: [_codeData]).then<int>((v) => v as int);
   }
 
   /// since: 1
@@ -57,7 +61,8 @@ class Window {
 
   /// since: 1
   Future<dynamic> getVar(Neovim neovim, String name) async {
-    neovim.session.call<dynamic>("nvim_win_get_var", args: [_codeData, name]);
+    neovim.session.call<dynamic>("nvim_win_get_var",
+        args: [_codeData, name]).then<dynamic>((v) => v as dynamic);
   }
 
   /// since: 1
@@ -73,8 +78,8 @@ class Window {
 
   /// since: 1
   Future<dynamic> getOption(Neovim neovim, String name) async {
-    neovim.session
-        .call<dynamic>("nvim_win_get_option", args: [_codeData, name]);
+    neovim.session.call<dynamic>("nvim_win_get_option",
+        args: [_codeData, name]).then<dynamic>((v) => v as dynamic);
   }
 
   /// since: 1
@@ -87,28 +92,32 @@ class Window {
   Future<List<int>> getPosition(
     Neovim neovim,
   ) async {
-    neovim.session.call<List<int>>("nvim_win_get_position", args: [_codeData]);
+    neovim.session.call<List<int>>("nvim_win_get_position",
+        args: [_codeData]).then<List<int>>((v) => (v as List).cast<int>());
   }
 
   /// since: 1
   Future<Tabpage> getTabpage(
     Neovim neovim,
   ) async {
-    neovim.session.call<Tabpage>("nvim_win_get_tabpage", args: [_codeData]);
+    neovim.session.call<Tabpage>("nvim_win_get_tabpage",
+        args: [_codeData]).then<Tabpage>((v) => v as Tabpage);
   }
 
   /// since: 1
   Future<int> getNumber(
     Neovim neovim,
   ) async {
-    neovim.session.call<int>("nvim_win_get_number", args: [_codeData]);
+    neovim.session.call<int>("nvim_win_get_number",
+        args: [_codeData]).then<int>((v) => v as int);
   }
 
   /// since: 1
   Future<bool> isValid(
     Neovim neovim,
   ) async {
-    neovim.session.call<bool>("nvim_win_is_valid", args: [_codeData]);
+    neovim.session.call<bool>("nvim_win_is_valid",
+        args: [_codeData]).then<bool>((v) => v as bool);
   }
 
   /// since: 6
@@ -120,8 +129,9 @@ class Window {
   Future<Map<dynamic, dynamic>> getConfig(
     Neovim neovim,
   ) async {
-    neovim.session
-        .call<Map<dynamic, dynamic>>("nvim_win_get_config", args: [_codeData]);
+    neovim.session.call<Map<dynamic, dynamic>>("nvim_win_get_config", args: [
+      _codeData
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   /// since: 6

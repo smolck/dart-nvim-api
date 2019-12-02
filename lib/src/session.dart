@@ -203,7 +203,7 @@ class Session {
   /// Returns response from Neovim as a [Future], which evaluates
   /// to `null` if Neovim never responds (or responds with a request
   /// or notification).
-  Future<T> call<T>(String function, {List<dynamic> args}) async {
+  Future<dynamic> call(String function, {List<dynamic> args}) async {
     final cmd = [
       0,
       _senderId,
@@ -223,6 +223,6 @@ class Session {
 
     final id = _senderId++;
     _pendingResponses[id] = Completer();
-    return _pendingResponses[id].future.then((v) => v as T);
+    return _pendingResponses[id].future;
   }
 }

@@ -14,6 +14,18 @@ import string
 
 INPUT = 'gen_bindings'
 
+def remove_wrapping_list(s):
+    new_str = re.compile('List<(.*?)>').match(s).group(1)
+    return new_str + '>' if '<' in new_str else new_str
+
+
+def is_void(s):
+    return s == 'void'
+
+
+def is_list(s):
+    return 'List' in s
+
 
 def to_pascal_case(s):
     """
@@ -288,6 +300,9 @@ if __name__ == '__main__':
 
                 env['to_camel_case'] = to_camel_case
                 env['to_pascal_case'] = to_pascal_case
+                env['is_list'] = is_list
+                env['remove_wrapping_list'] = remove_wrapping_list
+                env['is_void'] = is_void
 
                 env['make_args_from_params'] = make_args_from_params
                 generate_file(name, outpath, directory, **env)
