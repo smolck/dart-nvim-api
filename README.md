@@ -1,8 +1,11 @@
 [![Build Status](https://travis-ci.org/smolck/dart-nvim-api.svg?branch=master)](https://travis-ci.org/smolck/dart-nvim-api)
 [![Pub](https://img.shields.io/pub/v/dart_nvim_api.svg)](https://pub.dartlang.org/packages/dart_nvim_api)
 # Dart Nvim API
+
 Neovim API implementation for [Dart](dart.dev), based on and inspired by [neovim-lib](https://github.com/daa84/neovim-lib).
 Still a WIP, so any feedback, contributions, etc. are greatly appreciated.
+
+> NOTE: Dart Nvim API is still in its early stages, so there are likely to be breaking API changes.
 
 # Example Usage
 ```dart
