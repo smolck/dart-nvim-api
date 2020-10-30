@@ -1,20 +1,19 @@
 import 'package:dart_nvim_api/dart_nvim_api.dart';
 import 'package:test/test.dart';
 
-void main() {
-  testUiAttach();
+void main() async {
+  test('Do stuff', doStuff);
 }
 
-Future<void> testUiAttach() async {
-  var api = Neovim.fromSession(Session());
-
-  test('attaches ui successfully', () async {
-    await api.attachUi(
-        width: 50, height: 50, options: UiAttachOptions()..rgb = true);
-
-    await Future.delayed(Duration(seconds: 2));
-
-    assert(api.session.pendingNotifications.keys
-        .any((notifStr) => notifStr == 'redraw'));
+Future<void> doStuff() async {
+  var nvim = await Nvim.spawn(onNotify: (nvim, method, args) {
+    print('NOTIFY: $nvim $method $args');
+  }, onRequest: (nvim, method, args) {
+    print('REQUEST: $nvim $method $args');
   });
+
+  print(nvim.eval('1 + 1'));
+
+  assert(false);
+  // assert(await nvim.call('nvim_eval', args: ['2 + 2']) == 4);
 }

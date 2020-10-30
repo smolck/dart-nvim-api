@@ -4,11 +4,11 @@ import 'package:dart_nvim_api/dart_nvim_api.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  await sessionCommunicatesOverStdin();
+  // await sessionCommunicatesOverStdin();
   // await sessionConnectsToRunningInstance();
 }
 
-void sessionCommunicatesOverStdin() async {
+/* void sessionCommunicatesOverStdin() async {
   final sessionOverStdin = Session();
 
   final response = await sessionOverStdin
@@ -37,4 +37,4 @@ void sessionConnectsToRunningInstance() async {
     session.call('nvim_command', args: ['qa!']);
   });
 
-}
+} */
