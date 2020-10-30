@@ -12,7 +12,7 @@ Future<void> doStuff() async {
     print('REQUEST: $nvim $method $args');
   });
 
-  print(nvim.eval('1 + 1'));
+  print('eval: ${await nvim.eval('1 + 1')}');
 
   assert(false);
   // assert(await nvim.call('nvim_eval', args: ['2 + 2']) == 4);

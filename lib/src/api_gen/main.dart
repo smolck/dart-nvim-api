@@ -22,7 +22,7 @@ void main() {
       winMethods.add(method);
     } else if (method['name'].contains('tabpage')) {
       tabpageMethods.add(method);
-    } else {
+    } else if (method['name'].contains('nvim_')) {
       otherMethods.add(method);
     }
   }
@@ -33,14 +33,14 @@ void main() {
   final emitter = DartEmitter();
   final formatter = DartFormatter();
 
-  final buf = formatter
-      .format(wrapGeneratedCode('NvimBufferApi', '${library(bufMethods).accept(emitter)}'));
-  final win = formatter
-      .format(wrapGeneratedCode('NvimWindowApi', '${library(winMethods).accept(emitter)}'));
-  final tabpage = formatter
-      .format(wrapGeneratedCode('NvimTabpageApi', '${library(tabpageMethods).accept(emitter)}'));
-  final nvim = formatter
-      .format(wrapGeneratedCode('NvimApi', '${library(otherMethods).accept(emitter)}'));
+  final buf = formatter.format(wrapGeneratedCode(
+      'NvimBufferApi', '${library(bufMethods).accept(emitter)}'));
+  final win = formatter.format(wrapGeneratedCode(
+      'NvimWindowApi', '${library(winMethods).accept(emitter)}'));
+  final tabpage = formatter.format(wrapGeneratedCode(
+      'NvimTabpageApi', '${library(tabpageMethods).accept(emitter)}'));
+  final nvim = formatter.format(
+      wrapGeneratedCode('NvimApi', '${library(otherMethods).accept(emitter)}'));
 
   Directory('lib/src/gen')
     ..deleteSync(recursive: true)
@@ -63,6 +63,8 @@ void main() {
 
 String wrapGeneratedCode(String extensionName, String code) {
   return '''
+    import '../neovim.dart';
+
     extension ${extensionName} on Nvim {
       ${code}
     }
@@ -91,7 +93,7 @@ Method infoToMethod(dynamic info) {
 
   return Method((b) => b
     ..body = Block.of([
-      Code("return _call('${info['name']}', args: ["),
+      Code("return call('${info['name']}', args: ["),
       ...info['parameters'].map((x) => Code('${x[1]}, ')),
       const Code(']);')
     ])

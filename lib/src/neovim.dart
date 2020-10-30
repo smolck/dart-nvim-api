@@ -63,7 +63,7 @@ class Nvim {
     return nvim;
   }
 
-  Future<dynamic> _call(String method, {List<dynamic> args}) {
+  Future<dynamic> call(String method, {List<dynamic> args}) {
     final reqId = _nextReqId;
     _nextReqId++;
 
