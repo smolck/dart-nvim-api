@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:msgpack_dart/msgpack_dart.dart' as mpack;
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 
@@ -9,7 +8,8 @@ void main() {
   Map<String, dynamic> apiInfo =
       json.decode(File('lib/src/api_gen/api_info.json').readAsStringSync());
 
-  var methods = apiInfo['functions'];
+  var methods =
+      apiInfo['functions'].where((x) => x['deprecated_since'] == null);
   var bufMethods = [];
   var winMethods = [];
   var tabpageMethods = [];
@@ -64,6 +64,8 @@ void main() {
 String wrapGeneratedCode(String extensionName, String code) {
   return '''
     import '../neovim.dart';
+    ${/* TODO(smolck): This is just . . . bad */
+      extensionName == 'NvimApi' ? '' : 'import \'../ext_types.dart\';'}
 
     extension ${extensionName} on Nvim {
       ${code}
@@ -88,14 +90,23 @@ String convertInfoName(String name) {
 }
 
 Method infoToMethod(dynamic info) {
-  var returnType = TypeReference(
-      (b) => b.symbol = 'Future<${toDartType(info['return_type'])}>');
+  final typeStr = toDartType(info['return_type']);
+  final returnType = TypeReference((b) => b.symbol = 'Future<$typeStr>');
+
+  var typeForCastIfList = typeStr.replaceFirst('List<', '');
+  // Remove extra trailing '>'
+  typeForCastIfList = typeForCastIfList.replaceRange(
+      typeForCastIfList.length - 1, typeForCastIfList.length, '');
+  final cast = typeStr.contains('List')
+      ? '(v as List).cast<$typeForCastIfList>()'
+      : 'v as $typeStr';
 
   return Method((b) => b
     ..body = Block.of([
       Code("return call('${info['name']}', args: ["),
       ...info['parameters'].map((x) => Code('${x[1]}, ')),
-      const Code(']);')
+      Code(
+          '])${typeStr == 'void' || typeStr == 'dynamic' ? ';' : '.then<$typeStr>((v) => $cast);'}')
     ])
     ..name = convertInfoName(info['name'])
     ..requiredParameters.addAll(info['parameters']

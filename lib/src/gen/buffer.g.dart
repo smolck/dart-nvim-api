@@ -1,17 +1,11 @@
 import '../neovim.dart';
+import '../ext_types.dart';
 
 extension NvimBufferApi on Nvim {
   Future<int> bufLineCount(Buffer buffer) {
     return call('nvim_buf_line_count', args: [
       buffer,
-    ]);
-  }
-
-  Future<String> bufferGetLine(Buffer buffer, int index) {
-    return call('buffer_get_line', args: [
-      buffer,
-      index,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<bool> bufAttach(
@@ -20,39 +14,13 @@ extension NvimBufferApi on Nvim {
       buffer,
       send_buffer,
       opts,
-    ]);
+    ]).then<bool>((v) => v as bool);
   }
 
   Future<bool> bufDetach(Buffer buffer) {
     return call('nvim_buf_detach', args: [
       buffer,
-    ]);
-  }
-
-  Future<void> bufferSetLine(Buffer buffer, int index, String line) {
-    return call('buffer_set_line', args: [
-      buffer,
-      index,
-      line,
-    ]);
-  }
-
-  Future<void> bufferDelLine(Buffer buffer, int index) {
-    return call('buffer_del_line', args: [
-      buffer,
-      index,
-    ]);
-  }
-
-  Future<List<String>> bufferGetLineSlice(
-      Buffer buffer, int start, int end, bool include_start, bool include_end) {
-    return call('buffer_get_line_slice', args: [
-      buffer,
-      start,
-      end,
-      include_start,
-      include_end,
-    ]);
+    ]).then<bool>((v) => v as bool);
   }
 
   Future<List<String>> bufGetLines(
@@ -62,19 +30,7 @@ extension NvimBufferApi on Nvim {
       start,
       end,
       strict_indexing,
-    ]);
-  }
-
-  Future<void> bufferSetLineSlice(Buffer buffer, int start, int end,
-      bool include_start, bool include_end, List<String> replacement) {
-    return call('buffer_set_line_slice', args: [
-      buffer,
-      start,
-      end,
-      include_start,
-      include_end,
-      replacement,
-    ]);
+    ]).then<List<String>>((v) => (v as List).cast<String>());
   }
 
   Future<void> bufSetLines(Buffer buffer, int start, int end,
@@ -92,7 +48,7 @@ extension NvimBufferApi on Nvim {
     return call('nvim_buf_get_offset', args: [
       buffer,
       index,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<dynamic> bufGetVar(Buffer buffer, String name) {
@@ -105,14 +61,15 @@ extension NvimBufferApi on Nvim {
   Future<int> bufGetChangedtick(Buffer buffer) {
     return call('nvim_buf_get_changedtick', args: [
       buffer,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<List<Map<dynamic, dynamic>>> bufGetKeymap(Buffer buffer, String mode) {
     return call('nvim_buf_get_keymap', args: [
       buffer,
       mode,
-    ]);
+    ]).then<List<Map<dynamic, dynamic>>>(
+        (v) => (v as List).cast<Map<dynamic, dynamic>>());
   }
 
   Future<void> bufSetKeymap(Buffer buffer, String mode, String lhs, String rhs,
@@ -139,7 +96,7 @@ extension NvimBufferApi on Nvim {
     return call('nvim_buf_get_commands', args: [
       buffer,
       opts,
-    ]);
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<void> bufSetVar(Buffer buffer, String name, dynamic value) {
@@ -152,21 +109,6 @@ extension NvimBufferApi on Nvim {
 
   Future<void> bufDelVar(Buffer buffer, String name) {
     return call('nvim_buf_del_var', args: [
-      buffer,
-      name,
-    ]);
-  }
-
-  Future<dynamic> bufferSetVar(Buffer buffer, String name, dynamic value) {
-    return call('buffer_set_var', args: [
-      buffer,
-      name,
-      value,
-    ]);
-  }
-
-  Future<dynamic> bufferDelVar(Buffer buffer, String name) {
-    return call('buffer_del_var', args: [
       buffer,
       name,
     ]);
@@ -187,16 +129,10 @@ extension NvimBufferApi on Nvim {
     ]);
   }
 
-  Future<int> bufGetNumber(Buffer buffer) {
-    return call('nvim_buf_get_number', args: [
-      buffer,
-    ]);
-  }
-
   Future<String> bufGetName(Buffer buffer) {
     return call('nvim_buf_get_name', args: [
       buffer,
-    ]);
+    ]).then<String>((v) => v as String);
   }
 
   Future<void> bufSetName(Buffer buffer, String name) {
@@ -209,28 +145,20 @@ extension NvimBufferApi on Nvim {
   Future<bool> bufIsLoaded(Buffer buffer) {
     return call('nvim_buf_is_loaded', args: [
       buffer,
-    ]);
+    ]).then<bool>((v) => v as bool);
   }
 
   Future<bool> bufIsValid(Buffer buffer) {
     return call('nvim_buf_is_valid', args: [
       buffer,
-    ]);
-  }
-
-  Future<void> bufferInsert(Buffer buffer, int lnum, List<String> lines) {
-    return call('buffer_insert', args: [
-      buffer,
-      lnum,
-      lines,
-    ]);
+    ]).then<bool>((v) => v as bool);
   }
 
   Future<List<int>> bufGetMark(Buffer buffer, String name) {
     return call('nvim_buf_get_mark', args: [
       buffer,
       name,
-    ]);
+    ]).then<List<int>>((v) => (v as List).cast<int>());
   }
 
   Future<List<int>> bufGetExtmarkById(Buffer buffer, int ns_id, int id) {
@@ -238,7 +166,7 @@ extension NvimBufferApi on Nvim {
       buffer,
       ns_id,
       id,
-    ]);
+    ]).then<List<int>>((v) => (v as List).cast<int>());
   }
 
   Future<List<dynamic>> bufGetExtmarks(Buffer buffer, int ns_id, dynamic start,
@@ -249,7 +177,7 @@ extension NvimBufferApi on Nvim {
       start,
       end,
       opts,
-    ]);
+    ]).then<List<dynamic>>((v) => (v as List).cast<dynamic>());
   }
 
   Future<int> bufSetExtmark(Buffer buffer, int ns_id, int id, int line, int col,
@@ -261,7 +189,7 @@ extension NvimBufferApi on Nvim {
       line,
       col,
       opts,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<bool> bufDelExtmark(Buffer buffer, int ns_id, int id) {
@@ -269,7 +197,7 @@ extension NvimBufferApi on Nvim {
       buffer,
       ns_id,
       id,
-    ]);
+    ]).then<bool>((v) => v as bool);
   }
 
   Future<int> bufAddHighlight(Buffer buffer, int src_id, String hl_group,
@@ -281,7 +209,7 @@ extension NvimBufferApi on Nvim {
       line,
       col_start,
       col_end,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<void> bufClearNamespace(
@@ -312,22 +240,24 @@ extension NvimBufferApi on Nvim {
       line,
       chunks,
       opts,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<List<dynamic>> bufGetVirtualText(Buffer buffer, int line) {
     return call('nvim_buf_get_virtual_text', args: [
       buffer,
       line,
-    ]);
+    ]).then<List<dynamic>>((v) => (v as List).cast<dynamic>());
   }
 
   Future<List<Buffer>> listBufs() {
-    return call('nvim_list_bufs', args: []);
+    return call('nvim_list_bufs', args: [])
+        .then<List<Buffer>>((v) => (v as List).cast<Buffer>());
   }
 
   Future<Buffer> getCurrentBuf() {
-    return call('nvim_get_current_buf', args: []);
+    return call('nvim_get_current_buf', args: [])
+        .then<Buffer>((v) => v as Buffer);
   }
 
   Future<void> setCurrentBuf(Buffer buffer) {
@@ -340,142 +270,19 @@ extension NvimBufferApi on Nvim {
     return call('nvim_create_buf', args: [
       listed,
       scratch,
-    ]);
+    ]).then<Buffer>((v) => v as Buffer);
   }
 
   Future<Buffer> winGetBuf(Window window) {
     return call('nvim_win_get_buf', args: [
       window,
-    ]);
+    ]).then<Buffer>((v) => v as Buffer);
   }
 
   Future<void> winSetBuf(Window window, Buffer buffer) {
     return call('nvim_win_set_buf', args: [
       window,
       buffer,
-    ]);
-  }
-
-  Future<int> bufferLineCount(Buffer buffer) {
-    return call('buffer_line_count', args: [
-      buffer,
-    ]);
-  }
-
-  Future<List<String>> bufferGetLines(
-      Buffer buffer, int start, int end, bool strict_indexing) {
-    return call('buffer_get_lines', args: [
-      buffer,
-      start,
-      end,
-      strict_indexing,
-    ]);
-  }
-
-  Future<void> bufferSetLines(Buffer buffer, int start, int end,
-      bool strict_indexing, List<String> replacement) {
-    return call('buffer_set_lines', args: [
-      buffer,
-      start,
-      end,
-      strict_indexing,
-      replacement,
-    ]);
-  }
-
-  Future<dynamic> bufferGetVar(Buffer buffer, String name) {
-    return call('buffer_get_var', args: [
-      buffer,
-      name,
-    ]);
-  }
-
-  Future<dynamic> bufferGetOption(Buffer buffer, String name) {
-    return call('buffer_get_option', args: [
-      buffer,
-      name,
-    ]);
-  }
-
-  Future<void> bufferSetOption(Buffer buffer, String name, dynamic value) {
-    return call('buffer_set_option', args: [
-      buffer,
-      name,
-      value,
-    ]);
-  }
-
-  Future<int> bufferGetNumber(Buffer buffer) {
-    return call('buffer_get_number', args: [
-      buffer,
-    ]);
-  }
-
-  Future<String> bufferGetName(Buffer buffer) {
-    return call('buffer_get_name', args: [
-      buffer,
-    ]);
-  }
-
-  Future<void> bufferSetName(Buffer buffer, String name) {
-    return call('buffer_set_name', args: [
-      buffer,
-      name,
-    ]);
-  }
-
-  Future<bool> bufferIsValid(Buffer buffer) {
-    return call('buffer_is_valid', args: [
-      buffer,
-    ]);
-  }
-
-  Future<List<int>> bufferGetMark(Buffer buffer, String name) {
-    return call('buffer_get_mark', args: [
-      buffer,
-      name,
-    ]);
-  }
-
-  Future<int> bufferAddHighlight(Buffer buffer, int src_id, String hl_group,
-      int line, int col_start, int col_end) {
-    return call('buffer_add_highlight', args: [
-      buffer,
-      src_id,
-      hl_group,
-      line,
-      col_start,
-      col_end,
-    ]);
-  }
-
-  Future<void> bufferClearHighlight(
-      Buffer buffer, int ns_id, int line_start, int line_end) {
-    return call('buffer_clear_highlight', args: [
-      buffer,
-      ns_id,
-      line_start,
-      line_end,
-    ]);
-  }
-
-  Future<List<Buffer>> getBuffers() {
-    return call('vim_get_buffers', args: []);
-  }
-
-  Future<Buffer> getCurrentBuffer() {
-    return call('vim_get_current_buffer', args: []);
-  }
-
-  Future<void> setCurrentBuffer(Buffer buffer) {
-    return call('vim_set_current_buffer', args: [
-      buffer,
-    ]);
-  }
-
-  Future<Buffer> windowGetBuffer(Window window) {
-    return call('window_get_buffer', args: [
-      window,
     ]);
   }
 }

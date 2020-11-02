@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:msgpack_dart/msgpack_dart.dart' as mpack;
+import './ext_types.dart';
 
 const REQUEST = 0;
 const RESPONSE = 1;
@@ -26,7 +27,8 @@ class Nvim {
       NvimHandler onNotify,
       // Neovim instance, method, args
       NvimHandler onRequest}) {
-    final List<dynamic> deserialized = mpack.deserialize(data);
+    final List<dynamic> deserialized =
+        mpack.deserialize(data, extDecoder: ExtTypeDecoder());
     switch (deserialized[0]) {
       case RESPONSE:
         // TODO(smolck): Verify `deserialized[1]` is the id.

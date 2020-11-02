@@ -55,7 +55,7 @@ extension NvimApi on Nvim {
     return call('nvim_exec', args: [
       src,
       output,
-    ]);
+    ]).then<String>((v) => v as String);
   }
 
   Future<void> command(String command) {
@@ -68,20 +68,20 @@ extension NvimApi on Nvim {
     return call('nvim_get_hl_by_name', args: [
       name,
       rgb,
-    ]);
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<Map<dynamic, dynamic>> getHlById(int hl_id, bool rgb) {
     return call('nvim_get_hl_by_id', args: [
       hl_id,
       rgb,
-    ]);
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<int> getHlIdByName(String name) {
     return call('nvim_get_hl_id_by_name', args: [
       name,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<void> feedkeys(String keys, String mode, bool escape_csi) {
@@ -95,7 +95,7 @@ extension NvimApi on Nvim {
   Future<int> input(String keys) {
     return call('nvim_input', args: [
       keys,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<void> inputMouse(String button, String action, String modifier,
@@ -117,25 +117,12 @@ extension NvimApi on Nvim {
       from_part,
       do_lt,
       special,
-    ]);
-  }
-
-  Future<String> commandOutput(String command) {
-    return call('nvim_command_output', args: [
-      command,
-    ]);
+    ]).then<String>((v) => v as String);
   }
 
   Future<dynamic> eval(String expr) {
     return call('nvim_eval', args: [
       expr,
-    ]);
-  }
-
-  Future<dynamic> executeLua(String code, List<dynamic> args) {
-    return call('nvim_execute_lua', args: [
-      code,
-      args,
     ]);
   }
 
@@ -165,18 +152,19 @@ extension NvimApi on Nvim {
   Future<int> strwidth(String text) {
     return call('nvim_strwidth', args: [
       text,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<List<String>> listRuntimePaths() {
-    return call('nvim_list_runtime_paths', args: []);
+    return call('nvim_list_runtime_paths', args: [])
+        .then<List<String>>((v) => (v as List).cast<String>());
   }
 
   Future<List<String>> getRuntimeFile(String name, bool all) {
     return call('nvim_get_runtime_file', args: [
       name,
       all,
-    ]);
+    ]).then<List<String>>((v) => (v as List).cast<String>());
   }
 
   Future<void> setCurrentDir(String dir) {
@@ -186,7 +174,8 @@ extension NvimApi on Nvim {
   }
 
   Future<String> getCurrentLine() {
-    return call('nvim_get_current_line', args: []);
+    return call('nvim_get_current_line', args: [])
+        .then<String>((v) => v as String);
   }
 
   Future<void> setCurrentLine(String line) {
@@ -265,11 +254,12 @@ extension NvimApi on Nvim {
   Future<int> createNamespace(String name) {
     return call('nvim_create_namespace', args: [
       name,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<Map<dynamic, dynamic>> getNamespaces() {
-    return call('nvim_get_namespaces', args: []);
+    return call('nvim_get_namespaces', args: [])
+        .then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<bool> paste(String data, bool crlf, int phase) {
@@ -277,7 +267,7 @@ extension NvimApi on Nvim {
       data,
       crlf,
       phase,
-    ]);
+    ]).then<bool>((v) => v as bool);
   }
 
   Future<void> put(List<String> lines, String type, bool after, bool follow) {
@@ -304,17 +294,18 @@ extension NvimApi on Nvim {
   Future<int> getColorByName(String name) {
     return call('nvim_get_color_by_name', args: [
       name,
-    ]);
+    ]).then<int>((v) => v as int);
   }
 
   Future<Map<dynamic, dynamic>> getColorMap() {
-    return call('nvim_get_color_map', args: []);
+    return call('nvim_get_color_map', args: [])
+        .then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<Map<dynamic, dynamic>> getContext(Map<dynamic, dynamic> opts) {
     return call('nvim_get_context', args: [
       opts,
-    ]);
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<dynamic> loadContext(Map<dynamic, dynamic> dict) {
@@ -324,13 +315,15 @@ extension NvimApi on Nvim {
   }
 
   Future<Map<dynamic, dynamic>> getMode() {
-    return call('nvim_get_mode', args: []);
+    return call('nvim_get_mode', args: [])
+        .then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<List<Map<dynamic, dynamic>>> getKeymap(String mode) {
     return call('nvim_get_keymap', args: [
       mode,
-    ]);
+    ]).then<List<Map<dynamic, dynamic>>>(
+        (v) => (v as List).cast<Map<dynamic, dynamic>>());
   }
 
   Future<void> setKeymap(
@@ -353,11 +346,12 @@ extension NvimApi on Nvim {
   Future<Map<dynamic, dynamic>> getCommands(Map<dynamic, dynamic> opts) {
     return call('nvim_get_commands', args: [
       opts,
-    ]);
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<List<dynamic>> getApiInfo() {
-    return call('nvim_get_api_info', args: []);
+    return call('nvim_get_api_info', args: [])
+        .then<List<dynamic>>((v) => (v as List).cast<dynamic>());
   }
 
   Future<void> setClientInfo(
@@ -378,17 +372,18 @@ extension NvimApi on Nvim {
   Future<Map<dynamic, dynamic>> getChanInfo(int chan) {
     return call('nvim_get_chan_info', args: [
       chan,
-    ]);
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<List<dynamic>> listChans() {
-    return call('nvim_list_chans', args: []);
+    return call('nvim_list_chans', args: [])
+        .then<List<dynamic>>((v) => (v as List).cast<dynamic>());
   }
 
   Future<List<dynamic>> callAtomic(List<dynamic> calls) {
     return call('nvim_call_atomic', args: [
       calls,
-    ]);
+    ]).then<List<dynamic>>((v) => (v as List).cast<dynamic>());
   }
 
   Future<Map<dynamic, dynamic>> parseExpression(
@@ -397,17 +392,18 @@ extension NvimApi on Nvim {
       expr,
       flags,
       highlight,
-    ]);
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
   Future<List<dynamic>> listUis() {
-    return call('nvim_list_uis', args: []);
+    return call('nvim_list_uis', args: [])
+        .then<List<dynamic>>((v) => (v as List).cast<dynamic>());
   }
 
   Future<List<dynamic>> getProcChildren(int pid) {
     return call('nvim_get_proc_children', args: [
       pid,
-    ]);
+    ]).then<List<dynamic>>((v) => (v as List).cast<dynamic>());
   }
 
   Future<dynamic> getProc(int pid) {
