@@ -11,39 +11,27 @@ Still a WIP, so any feedback, contributions, etc. are greatly appreciated.
 ```dart
 import 'package:dart_nvim_api/dart_nvim_api.dart';
 
-main(List<String> args) async {
-  // Start up Neovim instance and communicate over stdin/stdout:
-  var nvim = Neovim(nvimBinaryPath: 'nvim');
-
-  // Or connect to already running instance over TCP:
-  // var nvim = Neovim.connectToRunningInstance(host: '127.0.0.1', port: 8888);
+void main(List<String> args) async {
+  // Start up Neovim instance, with optional `onNotify` and `onRequest`
+  // callbacks.
+  // See also Nvim.child()
+  var nvim = await Nvim.spawn();
 
   // Run Neovim ex command.
   await nvim.command("echo 'hello'");
 
   // Get ex command output.
-  assert(await nvim.commandOutput("echo 'hello'") == null);
+
+  assert(await nvim.exec('echo 1 + 1', true) == '2');
 
   // Buffer example:
   var buf = await nvim.createBuf(true, false);
-  var bufNum = await buf.getNumber(nvim);
-  assert(bufNum == 2);
-  assert(await nvim.getCurrentBuf() is Buffer);
+  var bufNameWithoutPath = 'some name';
+  await nvim.bufSetName(buf, bufNameWithoutPath);
+  var bufName = await nvim.bufGetName(buf);
+  assert(bufName.contains(bufNameWithoutPath));
 
-  // Beyond that, you can run any Neovim api command. See `:help api-rpc` doc in Neovim.
-  // See also `example` directory.
+  // Kill Neovim when done.
+  nvim.kill();
 }
 ```
-
-# Contributing
-Changes to the `Neovim`, `Window`, `Buffer`, and `Tabpage` classes should be done
-in the template files in the `gen_bindings/src` folder. To generate `lib/src/*.dart` do 
-the following from the project root (requires `pip` in addition to `python` v3.7.4. Note that older versions 
-of Python 3 may work, I just haven't tested them):
-```console
-$ pip install -g datetime jinja2
-# Replacing <nvim binary path> as necessary:
-$ python gen_bindings/gen_bindings.py <nvim binary path> 'lib/src' 'gen_bindings/src/'
-```
-
-Changes to any other files can be done as usual.
