@@ -31,6 +31,10 @@ class Nvim {
         mpack.deserialize(data, extDecoder: ExtTypeDecoder());
     switch (deserialized[0]) {
       case RESPONSE:
+        if (deserialized[2] != null) {
+          // Throw any errors from Neovim.
+          throw deserialized[2][1];
+        }
         // TODO(smolck): Verify `deserialized[1]` is the id.
         nvim._waiting[deserialized[1]].complete(deserialized[3]);
         break;
