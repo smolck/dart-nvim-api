@@ -32,3 +32,27 @@ class ExtTypeDecoder extends ExtDecoder {
     }
   }
 }
+
+class ExtTypeEncoder extends ExtEncoder {
+  @override
+  int extTypeForObject(dynamic object) {
+    if (object is Buffer) {
+      return 0;
+    } else if (object is Window) {
+      return 1;
+    } else if (object is Tabpage) {
+      return 2;
+    }
+
+    throw "Can't decode object, not a Neovim type: $object";
+  }
+
+  @override
+  Uint8List encodeObject(dynamic object) {
+    if (object is Buffer || object is Window || object is Tabpage) {
+      return serialize(object.data);
+    }
+
+    throw "Object wasn't a Neovim ext type!";
+  }
+}

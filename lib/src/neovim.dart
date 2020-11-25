@@ -77,12 +77,16 @@ class Nvim {
     ];
 
     if (_nvim != null) {
-      _nvim.stdin.add(mpack.serialize(cmd));
+      _nvim.stdin.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     } else {
-      stdout.add(mpack.serialize(cmd));
+      stdout.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     }
 
     _waiting[reqId] = Completer();
     return _waiting[reqId].future;
+  }
+
+  void kill() {
+    _nvim.kill();
   }
 }
