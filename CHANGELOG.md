@@ -46,3 +46,8 @@
   tabpage APIs.
 - More/better tests
 - Various internal changes
+
+## 0.2.1
+
+- Errors from Neovim when calling API functions are now forwarded to the caller
+  via exceptions.
