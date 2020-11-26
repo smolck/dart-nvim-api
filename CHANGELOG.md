@@ -51,3 +51,8 @@
 
 - Errors from Neovim when calling API functions are now forwarded to the caller
   via exceptions.
+
+## 0.2.2
+
+- Add way to override onNotify and onRequest handlers after initialization of
+  `Nvim`

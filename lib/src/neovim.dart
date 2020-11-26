@@ -8,6 +8,7 @@ const REQUEST = 0;
 const RESPONSE = 1;
 const NOTIFICATION = 2;
 
+/// Parameters to function are Neovim instance, method, args
 typedef NvimHandler = void Function(Nvim, String, List<dynamic>);
 
 class Nvim {
@@ -21,12 +22,13 @@ class Nvim {
 
   Nvim._child() : _nvimFut = null;
 
-  static void _listener(Nvim nvim, dynamic data,
-      {
-      // Neovim instance, event, args
-      NvimHandler onNotify,
-      // Neovim instance, method, args
-      NvimHandler onRequest}) {
+  NvimHandler _onNotify;
+  NvimHandler _onRequest;
+
+  set onNotify(NvimHandler newHandler) => _onNotify = newHandler;
+  set onRequest(NvimHandler newHandler) => _onRequest = newHandler;
+
+  static void _listener(Nvim nvim, dynamic data) {
     final List<dynamic> deserialized =
         mpack.deserialize(data, extDecoder: ExtTypeDecoder());
     switch (deserialized[0]) {
@@ -39,10 +41,10 @@ class Nvim {
         nvim._waiting[deserialized[1]].complete(deserialized[3]);
         break;
       case REQUEST:
-        onRequest(nvim, deserialized[2], deserialized[3]);
+        nvim._onRequest(nvim, deserialized[2], deserialized[3]);
         break;
       case NOTIFICATION:
-        onNotify(nvim, deserialized[1], deserialized[2]);
+        nvim._onNotify(nvim, deserialized[1], deserialized[2]);
         break;
     }
   }
@@ -50,8 +52,14 @@ class Nvim {
   static Future<Nvim> child(
       {NvimHandler onNotify, NvimHandler onRequest}) async {
     var nvim = Nvim._child();
-    stdin.listen((data) =>
-        _listener(nvim, data, onNotify: onNotify, onRequest: onRequest));
+    if (onRequest != null) {
+      nvim.onRequest = onRequest;
+    }
+    if (onNotify != null) {
+      nvim.onNotify = onNotify;
+    }
+
+    stdin.listen((data) => _listener(nvim, data));
 
     return nvim;
   }
@@ -63,8 +71,15 @@ class Nvim {
       NvimHandler onRequest}) async {
     var nvim = Nvim._spawn(nvimBinary, commandArgs);
     nvim._nvim = await nvim._nvimFut;
-    nvim._nvim.stdout.listen((data) =>
-        _listener(nvim, data, onNotify: onNotify, onRequest: onRequest));
+    if (onRequest != null) {
+      nvim.onRequest = onRequest;
+    }
+
+    if (onNotify != null) {
+      nvim.onNotify = onNotify;
+    }
+
+    nvim._nvim.stdout.listen((data) => _listener(nvim, data));
 
     return nvim;
   }
