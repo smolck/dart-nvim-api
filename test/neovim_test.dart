@@ -21,10 +21,6 @@ void main() async {
 
   test('windows work', () async {
     var winBuf = await nvim.createBuf(true, false);
-    // TODO(smolck): Neovim errors for if you, say, don't use the required
-    // `relative` or `external` parameters, are completely silent. Should
-    // probably use exceptions for when Neovim returns the wrong thing or
-    // something.
     var win = await nvim.openWin(winBuf, true, {
       'relative': 'editor',
       'width': 12,
