@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:msgpack_dart/msgpack_dart.dart' as mpack;
 import './ext_types.dart';
@@ -11,16 +12,34 @@ const NOTIFICATION = 2;
 /// Parameters to function are Neovim instance, method, args
 typedef NvimHandler = void Function(Nvim, String, List<dynamic>);
 
+enum _NvimIsolateMsgType {
+  Request,
+  Response,
+  Notification,
+}
+
+class _NvimIsolateMsg {
+  final _NvimIsolateMsgType msgType;
+  final dynamic data;
+  final int maybeResponseId;
+  final String maybeMethod;
+
+  _NvimIsolateMsg(
+      {this.msgType, this.data, this.maybeResponseId, this.maybeMethod});
+}
+
 class Nvim {
-  final Future<Process> _nvimFut;
   final Map<int, Completer<dynamic>> _waiting = {};
-  Process _nvim;
   int _nextReqId = 0;
 
-  Nvim._spawn(String nvimBinary, List<String> commandArgs)
-      : _nvimFut = Process.start(nvimBinary, commandArgs);
+  final bool isChild;
+  Isolate _nvimIsolate;
+  Stream _nvimRxStream;
+  SendPort _nvimTxPort;
 
-  Nvim._child() : _nvimFut = null;
+  Nvim._spawn(String nvimBinary, List<String> commandArgs) : isChild = false;
+
+  Nvim._child() : isChild = true;
 
   NvimHandler _onNotify;
   NvimHandler _onRequest;
@@ -59,9 +78,63 @@ class Nvim {
       nvim.onNotify = onNotify;
     }
 
+    // TODO(smolck): Use isolates for this too like with `Nvim.spawn`?
     stdin.listen((data) => _listener(nvim, data));
 
     return nvim;
+  }
+
+  static void eventLoopIsolate(SendPort sendPort) async {
+    final receivePort = ReceivePort();
+    final nvimProc = await Process.start('nvim', ['--embed']);
+
+    // Pass any data sent from main thread to neovim process.
+    receivePort.listen((data) {
+      nvimProc.stdin.add(data);
+    });
+
+    // First message gives a way for main isolate to communicate with this one.
+    sendPort.send(receivePort.sendPort);
+
+    // Event loop.
+    await for (final data in nvimProc.stdout) {
+      final List<dynamic> deserialized =
+          mpack.deserialize(data, extDecoder: ExtTypeDecoder());
+      switch (deserialized[0]) {
+        case RESPONSE:
+          if (deserialized[2] != null) {
+            // TODO(smolck)
+            // Throw any errors from Neovim.
+            throw deserialized[2][1];
+          }
+          sendPort.send(
+            _NvimIsolateMsg(
+              msgType: _NvimIsolateMsgType.Response,
+              data: deserialized[3],
+              maybeResponseId: deserialized[1],
+            ),
+          );
+          break;
+        case REQUEST:
+          sendPort.send(
+            _NvimIsolateMsg(
+              msgType: _NvimIsolateMsgType.Request,
+              maybeMethod: deserialized[2],
+              data: deserialized[3],
+            ),
+          );
+          break;
+        case NOTIFICATION:
+          sendPort.send(
+            _NvimIsolateMsg(
+              msgType: _NvimIsolateMsgType.Notification,
+              maybeMethod: deserialized[1],
+              data: deserialized[2],
+            ),
+          );
+          break;
+      }
+    }
   }
 
   static Future<Nvim> spawn(
@@ -70,7 +143,6 @@ class Nvim {
       NvimHandler onNotify,
       NvimHandler onRequest}) async {
     var nvim = Nvim._spawn(nvimBinary, commandArgs);
-    nvim._nvim = await nvim._nvimFut;
     if (onRequest != null) {
       nvim.onRequest = onRequest;
     }
@@ -79,7 +151,30 @@ class Nvim {
       nvim.onNotify = onNotify;
     }
 
-    nvim._nvim.stdout.listen((data) => _listener(nvim, data));
+    final receivePort = ReceivePort();
+    nvim._nvimIsolate = await Isolate.spawn(eventLoopIsolate, receivePort.sendPort);
+    nvim._nvimRxStream = receivePort.asBroadcastStream();
+    nvim._nvimTxPort = await nvim._nvimRxStream.first;
+
+    nvim._nvimRxStream.listen((msg) {
+      if (msg is SendPort) {
+        nvim._nvimTxPort = msg;
+      } else if (!(msg is _NvimIsolateMsg)) {
+        throw 'This should not happen, maybe open an issue at https://github.com/smolck/dart-nvim-api/issues';
+      } else if (msg is _NvimIsolateMsg) {
+        switch (msg.msgType) {
+          case _NvimIsolateMsgType.Response:
+            nvim._waiting[msg.maybeResponseId].complete(msg.data);
+            break;
+          case _NvimIsolateMsgType.Notification:
+            nvim._onNotify(nvim, msg.maybeMethod, msg.data);
+            break;
+          case _NvimIsolateMsgType.Request:
+            nvim._onRequest(nvim, msg.maybeMethod, msg.data);
+            break;
+        }
+      }
+    });
 
     return nvim;
   }
@@ -95,10 +190,10 @@ class Nvim {
       if (args != null) args else [],
     ];
 
-    if (_nvim != null) {
-      _nvim.stdin.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
-    } else {
+    if (isChild) {
       stdout.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
+    } else {
+      _nvimTxPort.send(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     }
 
     _waiting[reqId] = Completer();
@@ -106,6 +201,8 @@ class Nvim {
   }
 
   void kill() {
-    _nvim.kill();
+    if (_nvimIsolate != null) {
+      _nvimIsolate.kill();
+    }
   }
 }
