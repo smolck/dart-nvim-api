@@ -64,6 +64,8 @@ void main() {
 String wrapGeneratedCode(String extensionName, String code) {
   return '''
     import '../neovim.dart';
+    import '../ext_types.dart';
+
     ${/* TODO(smolck): This is just . . . bad */
       extensionName == 'NvimApi' ? '' : 'import \'../ext_types.dart\';'}
 

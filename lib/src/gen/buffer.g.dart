@@ -1,6 +1,8 @@
 import '../neovim.dart';
 import '../ext_types.dart';
 
+import '../ext_types.dart';
+
 extension NvimBufferApi on Nvim {
   Future<int> bufLineCount(Buffer buffer) {
     return call('nvim_buf_line_count', args: [

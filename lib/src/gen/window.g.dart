@@ -1,6 +1,8 @@
 import '../neovim.dart';
 import '../ext_types.dart';
 
+import '../ext_types.dart';
+
 extension NvimWindowApi on Nvim {
   Future<List<Window>> tabpageListWins(Tabpage tabpage) {
     return call('nvim_tabpage_list_wins', args: [

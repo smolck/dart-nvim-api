@@ -1,4 +1,5 @@
 import '../neovim.dart';
+import '../ext_types.dart';
 
 extension NvimApi on Nvim {
   Future<void> uiAttach(int width, int height, Map<dynamic, dynamic> options) {
