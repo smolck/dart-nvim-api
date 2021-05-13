@@ -12,9 +12,9 @@ const NOTIFICATION = 2;
 typedef NvimHandler = void Function(Nvim, String, List<dynamic>);
 
 class Nvim {
-  final Future<Process> _nvimFut;
+  late final Future<Process?>? _nvimFut;
   final Map<int, Completer<dynamic>> _waiting = {};
-  Process _nvim;
+  late Process? _nvim;
   int _nextReqId = 0;
 
   Nvim._spawn(String nvimBinary, List<String> commandArgs)
@@ -22,8 +22,8 @@ class Nvim {
 
   Nvim._child() : _nvimFut = null;
 
-  NvimHandler _onNotify;
-  NvimHandler _onRequest;
+  late NvimHandler _onNotify;
+  late NvimHandler _onRequest;
 
   set onNotify(NvimHandler newHandler) => _onNotify = newHandler;
   set onRequest(NvimHandler newHandler) => _onRequest = newHandler;
@@ -38,7 +38,7 @@ class Nvim {
           throw deserialized[2][1];
         }
         // TODO(smolck): Verify `deserialized[1]` is the id.
-        nvim._waiting[deserialized[1]].complete(deserialized[3]);
+        nvim._waiting[deserialized[1]]!.complete(deserialized[3]);
         break;
       case REQUEST:
         nvim._onRequest(nvim, deserialized[2], deserialized[3]);
@@ -50,7 +50,7 @@ class Nvim {
   }
 
   static Future<Nvim> child(
-      {NvimHandler onNotify, NvimHandler onRequest}) async {
+      {NvimHandler? onNotify, NvimHandler? onRequest}) async {
     var nvim = Nvim._child();
     if (onRequest != null) {
       nvim.onRequest = onRequest;
@@ -67,8 +67,8 @@ class Nvim {
   static Future<Nvim> spawn(
       {String nvimBinary = 'nvim',
       List<String> commandArgs = const ['--embed'],
-      NvimHandler onNotify,
-      NvimHandler onRequest}) async {
+      NvimHandler? onNotify,
+      NvimHandler? onRequest}) async {
     var nvim = Nvim._spawn(nvimBinary, commandArgs);
     nvim._nvim = await nvim._nvimFut;
     if (onRequest != null) {
@@ -79,12 +79,12 @@ class Nvim {
       nvim.onNotify = onNotify;
     }
 
-    nvim._nvim.stdout.listen((data) => _listener(nvim, data));
+    nvim._nvim!.stdout.listen((data) => _listener(nvim, data));
 
     return nvim;
   }
 
-  Future<dynamic> call(String method, {List<dynamic> args}) {
+  Future<dynamic> call(String method, {List<dynamic>? args}) {
     final reqId = _nextReqId;
     _nextReqId++;
 
@@ -96,16 +96,16 @@ class Nvim {
     ];
 
     if (_nvim != null) {
-      _nvim.stdin.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
+      _nvim!.stdin.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     } else {
       stdout.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     }
 
     _waiting[reqId] = Completer();
-    return _waiting[reqId].future;
+    return _waiting[reqId]!.future;
   }
 
   void kill() {
-    _nvim.kill();
+    _nvim!.kill();
   }
 }

@@ -4,14 +4,13 @@ version: 0.2.2
 homepage: https://github.com/smolck/dart-nvim-api
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  msgpack_dart: ^0.0.7
+  msgpack_dart: ^1.0.0
   meta: ^1.1.7
 
 dev_dependencies:
-  # pedantic: ^1.9.2
   dart_style:
   code_builder:
   test:
