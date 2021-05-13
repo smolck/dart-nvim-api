@@ -44,6 +44,18 @@ extension NvimBufferApi on Nvim {
     ]);
   }
 
+  Future<void> bufSetText(Buffer buffer, int start_row, int start_col,
+      int end_row, int end_col, List<String> replacement) {
+    return call('nvim_buf_set_text', args: [
+      buffer,
+      start_row,
+      start_col,
+      end_row,
+      end_col,
+      replacement,
+    ]);
+  }
+
   Future<int> bufGetOffset(Buffer buffer, int index) {
     return call('nvim_buf_get_offset', args: [
       buffer,
@@ -148,6 +160,13 @@ extension NvimBufferApi on Nvim {
     ]).then<bool>((v) => v as bool);
   }
 
+  Future<void> bufDelete(Buffer buffer, Map<dynamic, dynamic> opts) {
+    return call('nvim_buf_delete', args: [
+      buffer,
+      opts,
+    ]);
+  }
+
   Future<bool> bufIsValid(Buffer buffer) {
     return call('nvim_buf_is_valid', args: [
       buffer,
@@ -161,11 +180,13 @@ extension NvimBufferApi on Nvim {
     ]).then<List<int>>((v) => (v as List).cast<int>());
   }
 
-  Future<List<int>> bufGetExtmarkById(Buffer buffer, int ns_id, int id) {
+  Future<List<int>> bufGetExtmarkById(
+      Buffer buffer, int ns_id, int id, Map<dynamic, dynamic> opts) {
     return call('nvim_buf_get_extmark_by_id', args: [
       buffer,
       ns_id,
       id,
+      opts,
     ]).then<List<int>>((v) => (v as List).cast<int>());
   }
 
@@ -180,12 +201,11 @@ extension NvimBufferApi on Nvim {
     ]).then<List<dynamic>>((v) => (v as List).cast<dynamic>());
   }
 
-  Future<int> bufSetExtmark(Buffer buffer, int ns_id, int id, int line, int col,
-      Map<dynamic, dynamic> opts) {
+  Future<int> bufSetExtmark(
+      Buffer buffer, int ns_id, int line, int col, Map<dynamic, dynamic> opts) {
     return call('nvim_buf_set_extmark', args: [
       buffer,
       ns_id,
-      id,
       line,
       col,
       opts,
@@ -200,11 +220,11 @@ extension NvimBufferApi on Nvim {
     ]).then<bool>((v) => v as bool);
   }
 
-  Future<int> bufAddHighlight(Buffer buffer, int src_id, String hl_group,
+  Future<int> bufAddHighlight(Buffer buffer, int ns_id, String hl_group,
       int line, int col_start, int col_end) {
     return call('nvim_buf_add_highlight', args: [
       buffer,
-      src_id,
+      ns_id,
       hl_group,
       line,
       col_start,
@@ -215,16 +235,6 @@ extension NvimBufferApi on Nvim {
   Future<void> bufClearNamespace(
       Buffer buffer, int ns_id, int line_start, int line_end) {
     return call('nvim_buf_clear_namespace', args: [
-      buffer,
-      ns_id,
-      line_start,
-      line_end,
-    ]);
-  }
-
-  Future<void> bufClearHighlight(
-      Buffer buffer, int ns_id, int line_start, int line_end) {
-    return call('nvim_buf_clear_highlight', args: [
       buffer,
       ns_id,
       line_start,
@@ -243,11 +253,11 @@ extension NvimBufferApi on Nvim {
     ]).then<int>((v) => v as int);
   }
 
-  Future<List<dynamic>> bufGetVirtualText(Buffer buffer, int line) {
-    return call('nvim_buf_get_virtual_text', args: [
+  Future<dynamic> bufCall(Buffer buffer, LuaRef fun) {
+    return call('nvim_buf_call', args: [
       buffer,
-      line,
-    ]).then<List<dynamic>>((v) => (v as List).cast<dynamic>());
+      fun,
+    ]);
   }
 
   Future<List<Buffer>> listBufs() {

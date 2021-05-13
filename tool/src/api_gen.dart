@@ -6,7 +6,7 @@ import 'package:dart_style/dart_style.dart';
 
 void main() {
   Map<String, dynamic> apiInfo =
-      json.decode(File('tool/src/api_gen/api_info.json').readAsStringSync());
+      json.decode(File('tool/src/api_info.json').readAsStringSync());
 
   var methods =
       apiInfo['functions'].where((x) => x['deprecated_since'] == null);
@@ -131,7 +131,8 @@ String toDartType(dynamic x) {
     'Dictionary': 'Map<dynamic, dynamic>',
     'Window': 'Window',
     'Tabpage': 'Tabpage',
-    'Buffer': 'Buffer'
+    'Buffer': 'Buffer',
+    'LuaRef': 'LuaRef'
   };
 
   var typeRef = typeIndex[x];

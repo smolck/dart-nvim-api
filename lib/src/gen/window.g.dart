@@ -152,6 +152,12 @@ extension NvimWindowApi on Nvim {
     ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
   }
 
+  Future<void> winHide(Window window) {
+    return call('nvim_win_hide', args: [
+      window,
+    ]);
+  }
+
   Future<void> winClose(Window window, bool force) {
     return call('nvim_win_close', args: [
       window,
