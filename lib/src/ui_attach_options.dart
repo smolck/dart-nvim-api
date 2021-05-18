@@ -19,6 +19,9 @@ class UiAttachOptions {
   bool get extLinegrid => _opts['ext_linegrid'] ?? false;
   set extLinegrid(bool val) => _opts['ext_linegrid'] = val;
 
+  bool get extMultigrid => _opts['ext_multigrid'] ?? false;
+  set extMultigrid(bool val) => _opts['ext_multigrid'] = val;
+
   bool get extHlstate => _opts['ext_hlstate'] ?? false;
   set extHlstate(bool val) => _opts['ext_hlstate'] = val;
 
