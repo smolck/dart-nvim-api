@@ -144,7 +144,7 @@ String toDartType(dynamic x) {
 
   var regex = RegExp('ArrayOf\\(\\s*(\\w+)\\s*\\)');
   if (regex.hasMatch(x)) {
-    var match = regex.firstMatch(x).group(1);
+    var match = regex.firstMatch(x)?.group(1);
     return 'List<${typeIndex[match]}>';
   }
 
