@@ -56,3 +56,8 @@
 
 - Add way to override onNotify and onRequest handlers after initialization of
   `Nvim`
+
+## 0.3.0
+
+- Null Safety & update internal API bindings (https://github.com/smolck/dart-nvim-api/pull/5)
+- With `Nvim.spawn`, run nvim process in an `Isolate` (https://github.com/smolck/dart-nvim-api/pull/4)
