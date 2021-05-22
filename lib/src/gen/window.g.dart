@@ -1,6 +1,8 @@
 import '../neovim.dart';
 import '../ext_types.dart';
 
+import '../ext_types.dart';
+
 extension NvimWindowApi on Nvim {
   Future<List<Window>> tabpageListWins(Tabpage tabpage) {
     return call('nvim_tabpage_list_wins', args: [
@@ -150,6 +152,12 @@ extension NvimWindowApi on Nvim {
     return call('nvim_win_get_config', args: [
       window,
     ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
+  }
+
+  Future<void> winHide(Window window) {
+    return call('nvim_win_hide', args: [
+      window,
+    ]);
   }
 
   Future<void> winClose(Window window, bool force) {

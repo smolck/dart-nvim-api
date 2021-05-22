@@ -1,6 +1,8 @@
 import '../neovim.dart';
 import '../ext_types.dart';
 
+import '../ext_types.dart';
+
 extension NvimTabpageApi on Nvim {
   Future<dynamic> tabpageGetVar(Tabpage tabpage, String name) {
     return call('nvim_tabpage_get_var', args: [

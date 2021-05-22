@@ -7,6 +7,10 @@ class Buffer {
   Buffer(this.data);
 }
 
+class LuaRef {
+  LuaRef();
+}
+
 class Window {
   final int data;
 

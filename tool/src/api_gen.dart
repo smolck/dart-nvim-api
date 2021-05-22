@@ -6,7 +6,7 @@ import 'package:dart_style/dart_style.dart';
 
 void main() {
   Map<String, dynamic> apiInfo =
-      json.decode(File('tool/src/api_gen/api_info.json').readAsStringSync());
+      json.decode(File('tool/src/api_info.json').readAsStringSync());
 
   var methods =
       apiInfo['functions'].where((x) => x['deprecated_since'] == null);
@@ -64,6 +64,8 @@ void main() {
 String wrapGeneratedCode(String extensionName, String code) {
   return '''
     import '../neovim.dart';
+    import '../ext_types.dart';
+
     ${/* TODO(smolck): This is just . . . bad */
       extensionName == 'NvimApi' ? '' : 'import \'../ext_types.dart\';'}
 
@@ -131,7 +133,8 @@ String toDartType(dynamic x) {
     'Dictionary': 'Map<dynamic, dynamic>',
     'Window': 'Window',
     'Tabpage': 'Tabpage',
-    'Buffer': 'Buffer'
+    'Buffer': 'Buffer',
+    'LuaRef': 'LuaRef'
   };
 
   var typeRef = typeIndex[x];
@@ -141,9 +144,9 @@ String toDartType(dynamic x) {
 
   var regex = RegExp('ArrayOf\\(\\s*(\\w+)\\s*\\)');
   if (regex.hasMatch(x)) {
-    var match = regex.firstMatch(x).group(1);
+    var match = regex.firstMatch(x)!.group(1);
     return 'List<${typeIndex[match]}>';
   }
 
-  throw 'Bad things happened: ${x}';
+  throw 'Bad things happened: $x';
 }

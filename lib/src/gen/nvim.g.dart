@@ -1,4 +1,5 @@
 import '../neovim.dart';
+import '../ext_types.dart';
 
 extension NvimApi on Nvim {
   Future<void> uiAttach(int width, int height, Map<dynamic, dynamic> options) {
@@ -84,6 +85,14 @@ extension NvimApi on Nvim {
     ]).then<int>((v) => v as int);
   }
 
+  Future<void> setHl(int ns_id, String name, Map<dynamic, dynamic> val) {
+    return call('nvim_set_hl', args: [
+      ns_id,
+      name,
+      val,
+    ]);
+  }
+
   Future<void> feedkeys(String keys, String mode, bool escape_csi) {
     return call('nvim_feedkeys', args: [
       keys,
@@ -130,6 +139,15 @@ extension NvimApi on Nvim {
     return call('nvim_exec_lua', args: [
       code,
       args,
+    ]);
+  }
+
+  Future<dynamic> notify(
+      String msg, int log_level, Map<dynamic, dynamic> opts) {
+    return call('nvim_notify', args: [
+      msg,
+      log_level,
+      opts,
     ]);
   }
 
@@ -226,10 +244,30 @@ extension NvimApi on Nvim {
     ]);
   }
 
+  Future<Map<dynamic, dynamic>> getAllOptionsInfo() {
+    return call('nvim_get_all_options_info', args: [])
+        .then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
+  }
+
+  Future<Map<dynamic, dynamic>> getOptionInfo(String name) {
+    return call('nvim_get_option_info', args: [
+      name,
+    ]).then<Map<dynamic, dynamic>>((v) => v as Map<dynamic, dynamic>);
+  }
+
   Future<void> setOption(String name, dynamic value) {
     return call('nvim_set_option', args: [
       name,
       value,
+    ]);
+  }
+
+  Future<void> echo(
+      List<dynamic> chunks, bool history, Map<dynamic, dynamic> opts) {
+    return call('nvim_echo', args: [
+      chunks,
+      history,
+      opts,
     ]);
   }
 
@@ -248,6 +286,20 @@ extension NvimApi on Nvim {
   Future<void> errWriteln(String str) {
     return call('nvim_err_writeln', args: [
       str,
+    ]);
+  }
+
+  Future<int> openTerm(Buffer buffer, Map<dynamic, dynamic> opts) {
+    return call('nvim_open_term', args: [
+      buffer,
+      opts,
+    ]).then<int>((v) => v as int);
+  }
+
+  Future<void> chanSend(int chan, String data) {
+    return call('nvim_chan_send', args: [
+      chan,
+      data,
     ]);
   }
 
@@ -418,6 +470,13 @@ extension NvimApi on Nvim {
       item,
       insert,
       finish,
+      opts,
+    ]);
+  }
+
+  Future<void> setDecorationProvider(int ns_id, Map<dynamic, dynamic> opts) {
+    return call('nvim_set_decoration_provider', args: [
+      ns_id,
       opts,
     ]);
   }

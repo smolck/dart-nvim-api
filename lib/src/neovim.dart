@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:isolate';
+import 'dart:typed_data';
 
 import 'package:msgpack_dart/msgpack_dart.dart' as mpack;
 import './ext_types.dart';
@@ -21,11 +22,11 @@ enum _NvimIsolateMsgType {
 class _NvimIsolateMsg {
   final _NvimIsolateMsgType msgType;
   final dynamic data;
-  final int maybeResponseId;
-  final String maybeMethod;
+  final int? maybeResponseId;
+  final String? maybeMethod;
 
   _NvimIsolateMsg(
-      {this.msgType, this.data, this.maybeResponseId, this.maybeMethod});
+      {required this.msgType, required this.data, this.maybeResponseId, this.maybeMethod});
 }
 
 class Nvim {
@@ -33,16 +34,16 @@ class Nvim {
   int _nextReqId = 0;
 
   final bool isChild;
-  Isolate _nvimIsolate;
-  Stream _nvimRxStream;
-  SendPort _nvimTxPort;
+  Isolate? _nvimIsolate;
+  Stream? _nvimRxStream;
+  SendPort? _nvimTxPort;
 
   Nvim._spawn(String nvimBinary, List<String> commandArgs) : isChild = false;
 
   Nvim._child() : isChild = true;
 
-  NvimHandler _onNotify;
-  NvimHandler _onRequest;
+  late NvimHandler _onNotify;
+  late NvimHandler _onRequest;
 
   set onNotify(NvimHandler newHandler) => _onNotify = newHandler;
   set onRequest(NvimHandler newHandler) => _onRequest = newHandler;
@@ -57,7 +58,7 @@ class Nvim {
           throw deserialized[2][1];
         }
         // TODO(smolck): Verify `deserialized[1]` is the id.
-        nvim._waiting[deserialized[1]].complete(deserialized[3]);
+        nvim._waiting[deserialized[1]]!.complete(deserialized[3]);
         break;
       case REQUEST:
         nvim._onRequest(nvim, deserialized[2], deserialized[3]);
@@ -69,7 +70,7 @@ class Nvim {
   }
 
   static Future<Nvim> child(
-      {NvimHandler onNotify, NvimHandler onRequest}) async {
+      {NvimHandler? onNotify, NvimHandler? onRequest}) async {
     var nvim = Nvim._child();
     if (onRequest != null) {
       nvim.onRequest = onRequest;
@@ -98,8 +99,8 @@ class Nvim {
 
     // Event loop.
     await for (final data in nvimProc.stdout) {
-      final List<dynamic> deserialized =
-          mpack.deserialize(data, extDecoder: ExtTypeDecoder());
+      final List<dynamic> deserialized = mpack
+          .deserialize(Uint8List.fromList(data), extDecoder: ExtTypeDecoder());
       switch (deserialized[0]) {
         case RESPONSE:
           if (deserialized[2] != null) {
@@ -140,8 +141,8 @@ class Nvim {
   static Future<Nvim> spawn(
       {String nvimBinary = 'nvim',
       List<String> commandArgs = const ['--embed'],
-      NvimHandler onNotify,
-      NvimHandler onRequest}) async {
+      NvimHandler? onNotify,
+      NvimHandler? onRequest}) async {
     var nvim = Nvim._spawn(nvimBinary, commandArgs);
     if (onRequest != null) {
       nvim.onRequest = onRequest;
@@ -152,11 +153,12 @@ class Nvim {
     }
 
     final receivePort = ReceivePort();
-    nvim._nvimIsolate = await Isolate.spawn(eventLoopIsolate, receivePort.sendPort);
+    nvim._nvimIsolate =
+        await Isolate.spawn(eventLoopIsolate, receivePort.sendPort);
     nvim._nvimRxStream = receivePort.asBroadcastStream();
-    nvim._nvimTxPort = await nvim._nvimRxStream.first;
+    nvim._nvimTxPort = await nvim._nvimRxStream!.first;
 
-    nvim._nvimRxStream.listen((msg) {
+    nvim._nvimRxStream!.listen((msg) {
       if (msg is SendPort) {
         nvim._nvimTxPort = msg;
       } else if (!(msg is _NvimIsolateMsg)) {
@@ -164,13 +166,13 @@ class Nvim {
       } else if (msg is _NvimIsolateMsg) {
         switch (msg.msgType) {
           case _NvimIsolateMsgType.Response:
-            nvim._waiting[msg.maybeResponseId].complete(msg.data);
+            nvim._waiting[msg.maybeResponseId]?.complete(msg.data);
             break;
           case _NvimIsolateMsgType.Notification:
-            nvim._onNotify(nvim, msg.maybeMethod, msg.data);
+            nvim._onNotify(nvim, msg.maybeMethod!, msg.data);
             break;
           case _NvimIsolateMsgType.Request:
-            nvim._onRequest(nvim, msg.maybeMethod, msg.data);
+            nvim._onRequest(nvim, msg.maybeMethod!, msg.data);
             break;
         }
       }
@@ -179,7 +181,7 @@ class Nvim {
     return nvim;
   }
 
-  Future<dynamic> call(String method, {List<dynamic> args}) {
+  Future<dynamic> call(String method, {List<dynamic>? args}) {
     final reqId = _nextReqId;
     _nextReqId++;
 
@@ -193,16 +195,12 @@ class Nvim {
     if (isChild) {
       stdout.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     } else {
-      _nvimTxPort.send(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
+      _nvimTxPort!.send(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     }
 
     _waiting[reqId] = Completer();
-    return _waiting[reqId].future;
+    return _waiting[reqId]!.future;
   }
 
-  void kill() {
-    if (_nvimIsolate != null) {
-      _nvimIsolate.kill();
-    }
-  }
+  void kill() => _nvimIsolate?.kill();
 }
