@@ -202,7 +202,5 @@ class Nvim {
     return _waiting[reqId]!.future;
   }
 
-  void kill() {
-    _nvimIsolate?.kill();
-  }
+  void kill() => _nvimIsolate?.kill();
 }
