@@ -20,13 +20,13 @@ enum _NvimIsolateMsgType {
 }
 
 class _NvimIsolateMsg {
-  final _NvimIsolateMsgType? msgType;
+  final _NvimIsolateMsgType msgType;
   final dynamic data;
   final int? maybeResponseId;
   final String? maybeMethod;
 
   _NvimIsolateMsg(
-      {this.msgType, this.data, this.maybeResponseId, this.maybeMethod});
+      {required this.msgType, required this.data, this.maybeResponseId, this.maybeMethod});
 }
 
 class Nvim {
@@ -156,9 +156,9 @@ class Nvim {
     nvim._nvimIsolate =
         await Isolate.spawn(eventLoopIsolate, receivePort.sendPort);
     nvim._nvimRxStream = receivePort.asBroadcastStream();
-    nvim._nvimTxPort = await nvim._nvimRxStream?.first;
+    nvim._nvimTxPort = await nvim._nvimRxStream!.first;
 
-    nvim._nvimRxStream?.listen((msg) {
+    nvim._nvimRxStream!.listen((msg) {
       if (msg is SendPort) {
         nvim._nvimTxPort = msg;
       } else if (!(msg is _NvimIsolateMsg)) {
@@ -195,7 +195,7 @@ class Nvim {
     if (isChild) {
       stdout.add(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     } else {
-      _nvimTxPort?.send(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
+      _nvimTxPort!.send(mpack.serialize(cmd, extEncoder: ExtTypeEncoder()));
     }
 
     _waiting[reqId] = Completer();
@@ -203,8 +203,6 @@ class Nvim {
   }
 
   void kill() {
-    if (_nvimIsolate != null) {
-      _nvimIsolate?.kill();
-    }
+    _nvimIsolate?.kill();
   }
 }
